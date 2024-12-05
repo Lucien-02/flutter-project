@@ -1,3 +1,4 @@
+import 'package:comics_app/components/icon_text_widget.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -105,6 +106,15 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Container(
+                color: Colors.blueGrey,
+                child: const Center(
+                  //Exemple d'utilisation IconTextWidget
+                  child: IconTextRow(
+                    icon: Icons.calendar_today,
+                    text: '2024',
+                  ),
+                )),
             const Text(
               'You have pushed the button this many times:',
             ),
