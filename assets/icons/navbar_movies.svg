@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="18px" viewBox="0 0 20 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_movie</title>
+    <g id="ic_movie" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M18,0 L2,0 C0.897,0 0,0.897 0,2 L0,16 C0,17.103 0.897,18 2,18 L18,18 C19.103,18 20,17.103 20,16 L20,2 C20,0.897 19.103,0 18,0 Z M4,16 L2,16 L2,14 L4,14 L4,16 Z M4,12 L2,12 L2,10 L4,10 L4,12 Z M4,8 L2,8 L2,6 L4,6 L4,8 Z M4,4 L2.001,4 L2.001,2 L4,2 L4,4 Z M18,16 L16,16 L16,14 L18,14 L18,16 Z M18,12 L16,12 L16,10 L18,10 L18,12 Z M18,8 L16,8 L16,6 L18,6 L18,8 Z M18,4 L16,4 L16,2 L18,2 L18,4 Z" id="Shape" fill="#141416" fill-rule="nonzero"></path>
+    </g>
+</svg>

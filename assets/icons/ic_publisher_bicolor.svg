@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="16px" viewBox="0 0 20 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_publisher_bicolor</title>
+    <g id="ic_publisher_bicolor" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M2,1 C1.448,1 1,1.448 1,2 L1,5.116 L1.498,5.405 C2.425,5.942 3,6.936 3,8 C3,9.064 2.425,10.058 1.498,10.595 L1,10.884 L1,14 C1,14.552 1.448,15 2,15 L18,15 C18.552,15 19,14.552 19,14 L19,11.46 L19,10.884 L18.502,10.595 C17.575,10.058 17,9.064 17,8 C17,6.936 17.575,5.942 18.502,5.405 L19,5.116 L19,2 C19,1.448 18.552,1 18,1 L2,1 Z" id="Path" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+        <path d="M18,2 L18,4.537 C16.805,5.23 16,6.523 16,8 C16,9.477 16.805,10.771 18,11.463 L18,14 L2,14 L2,11.463 C3.195,10.771 4,9.478 4,8 C4,6.522 3.195,5.229 2,4.537 L2,2 L18,2 M18,0 L2,0 C0.9,0 0,0.9 0,2 L0,6 C1.1,6 2,6.9 2,8 C2,9.1 1.1,10 0,10 L0,14 C0,15.1 0.9,16 2,16 L18,16 C19.1,16 20,15.1 20,14 L20,10 C18.9,10 18,9.1 18,8 C18,6.9 18.9,6 20,6 L20,2 C20,0.9 19.1,0 18,0 L18,0 Z" id="Shape" fill="#000000" fill-rule="nonzero"></path>
+        <polygon id="Path" fill="#000000" fill-rule="nonzero" points="12.3 8.8 13.1 12.2 10 10.4 6.9 12.3 7.7 8.8 5 6.4 8.6 6.1 10 2.8 11.4 6.1 15 6.4"></polygon>
+    </g>
+</svg>
