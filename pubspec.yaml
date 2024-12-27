@@ -42,6 +42,7 @@ dependencies:
   json_annotation: any
   google_fonts: 6.2.1
   flutter_html: ^3.0.0-beta.2
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

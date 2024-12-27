@@ -1,7 +1,8 @@
+import 'package:comics_app/error/app_error.dart';
 import 'package:comics_app/manager/api_manager.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../model/serie_response.dart';
-import '../endpoint/api.dart';
 
 abstract class SerieEvent {}
 
@@ -40,30 +41,45 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
           fieldList: event.fieldList,
           limit: event.limit,
         );
-        print(seriesList);
-        // After fetching data, emit the loaded state
         emit(OneSerieLoadedState(serie: seriesList.results));
       } catch (error) {
-        emit(SerieErrorState(error));
+        AppError appError;
+
+        if (error is DioException) {
+          appError = AppError.fromDioError(error);
+        } else if (error is FormatException) {
+          appError = AppError.formatException();
+        } else {
+          appError = AppError.generic("Une erreur inconnue est survenue.");
+        }
+
+        emit(SerieErrorState(message: appError.message, code: appError.code));
       }
     });
 
     on<LoadSerieListEvent>((event, emit) async {
       try {
-        // Start loading state
         emit(SerieLoadingState());
 
         final seriesList = await _apiManager.loadSerieListFromAPI(
           fieldList: event.fieldList,
           limit: event.limit,
         );
-        // After fetching data, emit the loaded state
-        emit(SerieLoadedState(series: seriesList.results)); // Example data
+        emit(SerieLoadedState(series: seriesList.results));
       } catch (error) {
-        emit(SerieErrorState(error));
+        AppError appError;
+
+        if (error is DioException) {
+          appError = AppError.fromDioError(error);
+        } else if (error is FormatException) {
+          appError = AppError.formatException();
+        } else {
+          appError = AppError.generic("Une erreur inconnue est survenue.");
+        }
+
+        emit(SerieErrorState(message: appError.message, code: appError.code));
       }
     });
-   // add(LoadSerieListEvent());
 
   }
 }
@@ -76,16 +92,18 @@ class SerieInitialState extends SerieState {}
 class SerieLoadingState extends SerieState {}
 
 class OneSerieLoadedState extends SerieState {
-  final SerieResponse serie; // Example for list of series names
+  final SerieResponse serie;
   OneSerieLoadedState({required this.serie});
 }
 
 class SerieLoadedState extends SerieState {
-  final List<SerieResponse> series; // Example for list of series names
+  final List<SerieResponse> series;
   SerieLoadedState({required this.series});
 }
 
+
 class SerieErrorState  extends SerieState {
-  final dynamic error;
-  SerieErrorState(this.error);
+  final String message;
+  final int? code;
+  SerieErrorState({required this.message, this.code});
 }

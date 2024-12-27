@@ -19,10 +19,10 @@ class HeaderWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // Ensure proper vertical alignment
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(10.0),
               child: Image.network(
                 imageUrl.isNotEmpty
                     ? imageUrl
@@ -33,7 +33,6 @@ class HeaderWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: 10),
-            // Text Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +40,7 @@ class HeaderWidget extends StatelessWidget {
                   final icon = pair.keys.first;
                   final text = pair.values.first;
                   return Padding(
-                    padding:  EdgeInsets.symmetric(vertical: 4.0),
+                    padding:  EdgeInsets.only(top: 10.28),
                     child: IconTextRow(icon: icon, text: text),
                   );
                 }).toList(),

@@ -1,4 +1,3 @@
-import 'package:comics_app/component/detail/tab_content_widget.dart';
 import 'package:comics_app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,39 +16,39 @@ class MenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: tabs.length,
-      child: Column(
-        children: [
-          TabBar(
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.grey,
-            tabs: tabs,
-            indicatorColor: AppColors.orange,
-            dividerColor: Colors.transparent,
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.cardBackground,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              child:TabBarView(
-              children: screens,
+        length: tabs.length,
+        child: Column(
+          children: [
+            TabBar(
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.grey,
+              tabs: tabs,
+              indicatorColor: AppColors.orange,
+              dividerColor: Colors.transparent,
             ),
-            )
-          ),
+            Expanded(
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.cardBackground,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    child:TabBarView(
+                      children: screens,
+                    ),
+                  )
+              ),
 
-      ),
-        ],
-      )
+            ),
+          ],
+        )
     );
   }
 }

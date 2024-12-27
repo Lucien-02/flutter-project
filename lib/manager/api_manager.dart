@@ -1,8 +1,8 @@
 import 'package:comics_app/endpoint/api.dart';
-import 'package:comics_app/model/serie_response.dart';
 import 'package:comics_app/model/series_list_response.dart';
 import 'package:dio/dio.dart';
 
+import '../model/character_response.dart';
 import '../model/episode_response.dart';
 
 class ApiManager {
@@ -32,16 +32,16 @@ class ApiManager {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         options.headers = {
-          'api_key': apiKey,  // Add api_key header
-          'format': format,  // Add format header
+          'api_key': apiKey,
+          'format': format,
         };
-        return handler.next(options);  // Continue with the request
+        return handler.next(options);
       },
       onResponse: (response, handler) {
-        return handler.next(response);  // Continue with the response
+        return handler.next(response);
       },
       onError: (DioError e, handler) {
-        return handler.next(e);  // Continue with the error
+        return handler.next(e);
       },
     ));
   }
@@ -51,15 +51,15 @@ class ApiManager {
     String? fieldList,
     int? limit,
   }) async {
-      return api.loadSeries(
-        apiKey: apiKey,
-        format: format,
-        fieldList: fieldList,
-        limit: limit,);
-    }
+    return api.loadSeries(
+      apiKey: apiKey,
+      format: format,
+      fieldList: fieldList,
+      limit: limit,);
+  }
 
   Future<SerieResponseAPI> loadSerieWithCustomUrl({
-    required String baseUrl, // Full URL including the base
+    required String baseUrl,
     String? fieldList,
     int? limit,
   }) async {
@@ -67,7 +67,7 @@ class ApiManager {
     print(baseUrl);
 
     final response = await dio.get(
-      '', // Leave endpoint blank because you're only targeting the base URL
+      '',
       queryParameters: {
         'api_key': apiKey,
         'format': format,
@@ -75,22 +75,20 @@ class ApiManager {
         'limit': limit,
       },
     );
-    // Deserialize the response
     return SerieResponseAPI.fromJson(response.data);
   }
 
 
   Future<EpisodesListResponse> loadEpisodesBySerie({
-    required String baseUrl, // Full URL including the base
+    required String baseUrl,
     String? fieldList,
     String? filter,
     int? limit,
   }) async {
     final dio = Dio()..options.baseUrl = baseUrl;
-    print(baseUrl);
 
     final response = await dio.get(
-      '', // Leave endpoint blank because you're only targeting the base URL
+      '',
       queryParameters: {
         'api_key': apiKey,
         'format': format,
@@ -99,7 +97,29 @@ class ApiManager {
         'filter': filter,
       },
     );
-    // Deserialize the response
     return EpisodesListResponse.fromJson(response.data);
+  }
+
+
+  Future<CharacterResponseAPI> loadCharacterWithCustomUrl({
+    required String baseUrl,
+    String? fieldList,
+    String? filter,
+    int? limit,
+  }) async {
+    final dio = Dio()..options.baseUrl = baseUrl;
+
+    final response = await dio.get(
+      '',
+      queryParameters: {
+        'api_key': apiKey,
+        'format': format,
+        'field_list': fieldList,
+        'limit': limit,
+        //'filter': filter,
+      },
+    );
+
+    return CharacterResponseAPI.fromJson(response.data);
   }
 }

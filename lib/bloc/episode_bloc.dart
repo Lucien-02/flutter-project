@@ -1,7 +1,8 @@
+import 'package:comics_app/error/app_error.dart';
 import 'package:comics_app/manager/api_manager.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../model/episode_response.dart';
-import '../endpoint/api.dart';
 
 abstract class EpisodeEvent {}
 
@@ -34,7 +35,6 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
   EpisodeBloc(this._apiManager) : super(EpisodeInitialState()) {
     on<LoadEpisodeBySerieEvent>((event, emit) async {
       try {
-        // Start loading state
         emit(EpisodeLoadingState());
 
         final episodesList = await _apiManager.loadEpisodesBySerie(
@@ -44,10 +44,19 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
           filter: event.filter,
         );
         print(episodesList);
-        // After fetching data, emit the loaded state
         emit(EpisodeLoadedState(episodes: episodesList.results));
       } catch (error) {
-        emit(EpisodeErrorState(error));
+        AppError appError;
+
+        if (error is DioException) {
+          appError = AppError.fromDioError(error);
+        } else if (error is FormatException) {
+          appError = AppError.formatException();
+        } else {
+          appError = AppError.generic("Une erreur inconnue est survenue.");
+        }
+
+        emit(EpisodeErrorState(message: appError.message, code: appError.code));
       }
     });
 
@@ -67,6 +76,7 @@ class EpisodeLoadedState extends EpisodeState {
 }
 
 class EpisodeErrorState  extends EpisodeState {
-  final dynamic error;
-  EpisodeErrorState(this.error);
+  final String message;
+  final int? code;
+  EpisodeErrorState({required this.message, this.code});
 }
