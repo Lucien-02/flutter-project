@@ -1,3 +1,4 @@
+import 'package:comics_app/model/character_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'serie_response.g.dart';
@@ -6,6 +7,7 @@ part 'serie_response.g.dart';
 class SerieResponse {
   final String? aliases;
   final String? apiDetailUrl;
+  final List<dynamic>? characters;
   final int? countOfEpisodes;
   final String? dateAdded;
   final String? dateLastUpdated;
@@ -23,6 +25,7 @@ class SerieResponse {
   SerieResponse({
     required this.aliases,
     required this.apiDetailUrl,
+    required this.characters,
     required this.countOfEpisodes,
     required this.dateAdded,
     required this.dateLastUpdated,
@@ -42,6 +45,7 @@ class SerieResponse {
     return SerieResponse(
       aliases: json['aliases'],
       apiDetailUrl: json['api_detail_url'],
+      characters: json['characters'],
       countOfEpisodes: json['count_of_episodes'],
       dateAdded: json['date_added'],
       dateLastUpdated: json['date_last_updated'],

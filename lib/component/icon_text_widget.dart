@@ -14,8 +14,10 @@ class IconTextRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(bottom: 7.28),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -26,9 +28,9 @@ class IconTextRow extends StatelessWidget {
           const SizedBox(width: 8.0),
           Text(
             text,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white,
-                ),
+            style: textTheme.bodyMedium?.copyWith(
+              color: Colors.white,
+            ),
           ),
         ],
       ),

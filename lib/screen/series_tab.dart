@@ -6,30 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SeriesTab extends StatelessWidget {
-  //final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
     final apiManager = ApiManager();
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return BlocProvider(
       create: (context) => SerieBloc(apiManager)
         ..add(
-            LoadSerieListEvent(
-              fieldList: 'id,image,name,publisher,count_of_episodes,start_year,api_detail_url',
-              //limit: 5,
-            ),
+          LoadSerieListEvent(
+            fieldList: 'id,image,name,publisher,count_of_episodes,start_year,api_detail_url',
+            //limit: 5,
+          ),
         ),
       child: Scaffold(
         backgroundColor: AppColors.backgroundScreen,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text(
-              'Series List',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              )
+          title:  Text(
+            'Séries les plus populaires ',
+            style: textTheme.displayLarge,
           ),
         ),
         body: BlocBuilder<SerieBloc, SerieState>(
@@ -56,23 +53,23 @@ class SeriesTab extends StatelessWidget {
                   ];
 
                   return Padding(
-                      padding: const  EdgeInsets.symmetric(vertical:8.0),
-                      child: CardWidget(
-                          id: serie.id ?? 0,
-                          url: serie.apiDetailUrl ?? "",
-                          name: serie.name ?? "",
-                          subtitle: "",
-                          keyValuePairs: iconTextPairs,
-                          imageUrl: serie.image?.smallUrl ?? "",
-                          rank:serie?.id ?? 0,
-                          type:'serie',
+                    padding: const  EdgeInsets.symmetric(vertical:8.0),
+                    child: CardWidget(
+                      id: serie.id ?? 0,
+                      url: serie.apiDetailUrl ?? "",
+                      name: serie.name ?? "",
+                      subtitle: "",
+                      keyValuePairs: iconTextPairs,
+                      imageUrl: serie.image?.smallUrl ?? "",
+                      rank:serie?.id ?? 0,
+                      type:'serie',
 
-                      ),
+                    ),
                   );
                 },
               );
             } else if (state is SerieErrorState) {
-              return Center(child: Text('Error: ${state.error.toString()}',style: TextStyle(
+              return Center(child: Text('Error: ${state.message}',style: TextStyle(
                   fontSize: 11,
                   color: Colors.white)));
             }
@@ -80,8 +77,8 @@ class SeriesTab extends StatelessWidget {
                 child: Text(
                     'Please load the series list.',
                     style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.white)
+                        fontSize: 11,
+                        color: Colors.white)
                 )
             );
           },
