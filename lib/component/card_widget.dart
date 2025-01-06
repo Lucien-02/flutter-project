@@ -63,7 +63,7 @@ class CardWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               width: 359,
-              height: 164,
+              height: 200,
               child: Row(
                 children: [
                   // Left Image with rank badge

@@ -26,9 +26,18 @@ class LoadSeriesWithCustomUrlEvent extends SerieEvent {
   });
 }
 
+class LoadMoreSeriesEvent extends SerieEvent {
+  final String? fieldList;
+
+  LoadMoreSeriesEvent({this.fieldList});
+}
+
 
 class SerieBloc extends Bloc<SerieEvent, SerieState> {
   final ApiManager _apiManager;
+  int offset = 0;
+  final int limit = 50;
+  List<SerieResponse> series = [];
 
   SerieBloc(this._apiManager) : super(SerieInitialState()) {
     on<LoadSeriesWithCustomUrlEvent>((event, emit) async {
@@ -60,12 +69,18 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
     on<LoadSerieListEvent>((event, emit) async {
       try {
         emit(SerieLoadingState());
+        offset = 0;
 
         final seriesList = await _apiManager.loadSerieListFromAPI(
           fieldList: event.fieldList,
           limit: event.limit,
         );
-        emit(SerieLoadedState(series: seriesList.results));
+        series = seriesList.results;
+        emit(SerieLoadedState(series: series));
+        offset += seriesList.results.length;
+        print(offset);
+
+
       } catch (error) {
         AppError appError;
 
@@ -81,6 +96,45 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
       }
     });
 
+    on<LoadMoreSeriesEvent>((event, emit) async {
+      if (state is SerieLoadedState) {
+        try {
+          List<SerieResponse> currentSeries = [];
+
+          currentSeries = (state as SerieLoadedState).series;
+
+          final seriesList = await _apiManager.loadSerieListFromAPI(
+            fieldList: event.fieldList,
+            limit: limit,
+            offset: offset,
+          );
+
+          if (seriesList.results.isNotEmpty) {
+            final updatedSeries = [...currentSeries, ...seriesList.results];
+
+            offset += seriesList.results.length;
+
+            emit(SerieLoadedState(series: updatedSeries));
+          } else {
+            print('No more data available.');
+          }
+        } catch (error) {
+          print(error);
+          AppError appError;
+
+          if (error is DioException) {
+            appError = AppError.fromDioError(error);
+          } else if (error is FormatException) {
+            appError = AppError.formatException();
+          } else {
+            appError = AppError.generic("Une erreur inconnue est survenue.");
+          }
+
+          emit(SerieErrorState(message: appError.message, code: appError.code));
+        }
+      }
+    }
+    );
   }
 }
 

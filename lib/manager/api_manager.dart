@@ -50,12 +50,14 @@ class ApiManager {
   Future<SeriesListResponse> loadSerieListFromAPI({
     String? fieldList,
     int? limit,
+    int? offset
   }) async {
     return api.loadSeries(
       apiKey: apiKey,
       format: format,
       fieldList: fieldList,
-      limit: limit,);
+      limit: limit,
+      offset: offset,);
   }
 
   Future<SerieResponseAPI> loadSerieWithCustomUrl({

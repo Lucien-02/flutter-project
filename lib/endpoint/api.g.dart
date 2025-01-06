@@ -27,6 +27,7 @@ class _Api implements Api {
     required String format,
     String? fieldList,
     int? limit,
+    int? offset,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -34,6 +35,7 @@ class _Api implements Api {
       r'format': format,
       r'field_list': fieldList,
       r'limit': limit,
+      r'offset': offset,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
