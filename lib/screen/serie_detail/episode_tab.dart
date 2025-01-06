@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 
 
 class EpisodeTab extends StatelessWidget {
-  final int serieId;
+  final List<dynamic>? data;
 
-  const EpisodeTab({required this.serieId, Key? key}) : super(key: key);
+  const EpisodeTab({required this.data, Key? key}) : super(key: key);
 
   String formatAirDate(String airDate) {
     try {
@@ -23,60 +23,29 @@ class EpisodeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiManager = ApiManager();
+    return ListView.builder(
+      padding: EdgeInsets.only(top:15,right: 15,left: 15),
+      itemCount: data?.length ?? 0,
+      itemBuilder: (context, index) {
+        final episode = data?[index];
+       /* final formattedAirDate = formatAirDate(episode['airDate'] ?? "");
+        final List<Map<IconData, String>> iconTextPairs = [
+          {
+            Icons.calendar_today: formattedAirDate,
+          },
+        ];*/
 
-    return BlocProvider(
-      create: (context) => EpisodeBloc(apiManager)
-        ..add(
-          LoadEpisodeBySerieEvent(
-            baseUrl: 'https://comicvine.gamespot.com/api/episodes/',
-            fieldList: 'id,image,name,air_date,episode_number',
-            filter: 'series.id:${serieId}',
+        return Padding(
+          padding: const  EdgeInsets.symmetric(vertical:15.0),
+          child: EpisodeWidget(
+            episode_url: episode['api_detail_url'] ?? "",
+           /* name: "Episode #${episode['episodeNumber']}",
+            subtitle: episode['name'] ?? "",
+            keyValuePairs: iconTextPairs,
+            imageUrl: episode.image?.smallUrl ?? "",*/
           ),
-        ),
-      child: BlocBuilder<EpisodeBloc, EpisodeState>(
-        builder: (context, EpisodeState state) {
-          if (state is EpisodeLoadingState) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is EpisodeLoadedState) {
-            return ListView.builder(
-              padding: EdgeInsets.only(top:15,right: 15,left: 15),
-              itemCount: state.episodes.length,
-              itemBuilder: (context, index) {
-                final episode = state.episodes[index];
-                final formattedAirDate = formatAirDate(episode.airDate ?? "");
-                final List<Map<IconData, String>> iconTextPairs = [
-                  {
-                    Icons.calendar_today: formattedAirDate,
-                  },
-                ];
-
-                return Padding(
-                  padding: const  EdgeInsets.symmetric(vertical:15.0),
-                  child: EpisodeWidget(
-                    id: episode.id ?? 0,
-                    name: "Episode #${episode.episodeNumber}",
-                    subtitle: episode.name ?? "",
-                    keyValuePairs: iconTextPairs,
-                    imageUrl: episode.image?.smallUrl ?? "",
-                  ),
-                );
-              },
-            );
-          } else if (state is EpisodeErrorState) {
-            return Center(child: Text('Error: ${state.message}',style: TextStyle(
-                fontSize: 11,
-                color: Colors.white)));
-          }
-          return Center(
-              child: Text(
-                  'Please load the series list.',
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.white)
-              )
-          );
-        },
-      ),
+        );
+      },
     );
   }
 }

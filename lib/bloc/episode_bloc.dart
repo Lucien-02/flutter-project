@@ -6,23 +6,14 @@ import '../model/episode_response.dart';
 
 abstract class EpisodeEvent {}
 
-class LoadEpisodeListEvent extends EpisodeEvent {
-  final String? fieldList;
-  final int? limit;
 
-  LoadEpisodeListEvent({this.fieldList, this.limit});
-
-}
-
-class LoadEpisodeBySerieEvent extends EpisodeEvent {
+class LoadEpisodeEvent extends EpisodeEvent {
   final String baseUrl;
-  final String filter;
   final String? fieldList;
   final int? limit;
 
-  LoadEpisodeBySerieEvent({
+  LoadEpisodeEvent({
     required this.baseUrl,
-    required this.filter,
     this.fieldList,
     this.limit,
   });
@@ -33,18 +24,17 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
   final ApiManager _apiManager;
 
   EpisodeBloc(this._apiManager) : super(EpisodeInitialState()) {
-    on<LoadEpisodeBySerieEvent>((event, emit) async {
+    on<LoadEpisodeEvent>((event, emit) async {
       try {
         emit(EpisodeLoadingState());
 
-        final episodesList = await _apiManager.loadEpisodesBySerie(
+        final episode = await _apiManager.loadEpisodeWithCustomUrl(
           baseUrl: event.baseUrl,
           fieldList: event.fieldList,
           limit: event.limit,
-          filter: event.filter,
         );
-        print(episodesList);
-        emit(EpisodeLoadedState(episodes: episodesList.results));
+
+        emit(EpisodeLoadedState(episode: episode.results));
       } catch (error) {
         AppError appError;
 
@@ -71,8 +61,8 @@ class EpisodeInitialState extends EpisodeState {}
 class EpisodeLoadingState extends EpisodeState {}
 
 class EpisodeLoadedState extends EpisodeState {
-  final List<EpisodeResponse> episodes; // Example for list of series names
-  EpisodeLoadedState({required this.episodes});
+  final EpisodeResponse episode; // Example for list of series names
+  EpisodeLoadedState({required this.episode});
 }
 
 class EpisodeErrorState  extends EpisodeState {

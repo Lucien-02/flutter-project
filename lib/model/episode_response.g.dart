@@ -61,22 +61,19 @@ Map<String, dynamic> _$HasStaffReviewToJson(HasStaffReview instance) =>
       'siteDetailUrl': instance.siteDetailUrl,
     };
 
-EpisodesListResponse _$EpisodesListResponseFromJson(
-        Map<String, dynamic> json) =>
-    EpisodesListResponse(
+EpisodeResponseAPI _$EpisodeResponseAPIFromJson(Map<String, dynamic> json) =>
+    EpisodeResponseAPI(
       error: json['error'] as String?,
       limit: (json['limit'] as num?)?.toInt(),
       offset: (json['offset'] as num?)?.toInt(),
       numberOfPageResults: (json['number_of_page_results'] as num?)?.toInt(),
       numberOfTotalResults: (json['number_of_total_results'] as num?)?.toInt(),
       statusCode: (json['status_code'] as num?)?.toInt(),
-      results: (json['results'] as List<dynamic>)
-          .map((e) => EpisodeResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      results:
+          EpisodeResponse.fromJson(json['results'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$EpisodesListResponseToJson(
-        EpisodesListResponse instance) =>
+Map<String, dynamic> _$EpisodeResponseAPIToJson(EpisodeResponseAPI instance) =>
     <String, dynamic>{
       'error': instance.error,
       'limit': instance.limit,

@@ -85,7 +85,7 @@ class HasStaffReview {
 }
 
 @JsonSerializable()
-class EpisodesListResponse {
+class EpisodeResponseAPI {
   @JsonKey(name: 'error')
   final String? error;
 
@@ -105,9 +105,9 @@ class EpisodesListResponse {
   final int? statusCode;
 
   @JsonKey(name: 'results')
-  final List<EpisodeResponse> results;
+  final EpisodeResponse results;
 
-  EpisodesListResponse({
+  EpisodeResponseAPI({
     required this.error,
     required this.limit,
     required this.offset,
@@ -117,17 +117,15 @@ class EpisodesListResponse {
     required this.results,
   });
 
-  factory EpisodesListResponse.fromJson(Map<String, dynamic> json) {
-    return EpisodesListResponse(
+  factory EpisodeResponseAPI.fromJson(Map<String, dynamic> json) {
+    return EpisodeResponseAPI(
       error: json['error'] as String?,
       limit: json['limit'] as int?,
       offset: json['offset'] as int?,
       numberOfPageResults: json['number_of_page_results'] as int?,
       numberOfTotalResults: json['number_of_total_results'] as int?,
       statusCode: json['status_code'] as int?,
-      results: (json['results'] as List<dynamic>)
-          .map((e) => EpisodeResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      results: EpisodeResponse.fromJson(json['results']),
     );
   }
 }

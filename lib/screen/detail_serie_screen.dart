@@ -39,28 +39,16 @@ class _DetailScreenState extends State<DetailSerieScreen> {
   Widget build(BuildContext context) {
     final apiManager = ApiManager(dio:Dio(), baseUrl: widget.url);
     final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => SerieBloc(apiManager)
+    print(widget.id);
+    return
+      BlocProvider(create: (_) => SerieBloc(apiManager)
             ..add(
                 LoadSeriesWithCustomUrlEvent(
                   baseUrl: widget.url,
-                  fieldList: 'id,image,name,publisher,count_of_episodes,start_year,api_detail_url,description,characters',
+                  fieldList: 'id,image,name,publisher,count_of_episodes,start_year,api_detail_url,description,characters,episodes',
                 )
-            )
-          ),
-          BlocProvider(create: (_) => EpisodeBloc(apiManager)
-            ..add(
-                LoadEpisodeBySerieEvent(
-                  baseUrl: 'https://comicvine.gamespot.com/api/episodes/',
-                  fieldList: 'id,image,name,episode_number,date_added,api_detail_url',
-                  filter: 'series.id:${widget.id}',
-                )
-            )
-          ),
+            ),
 
-        ],
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar:  AppBar(
@@ -147,9 +135,7 @@ class _DetailScreenState extends State<DetailSerieScreen> {
                       Expanded(
                         child: BlocBuilder<SerieBloc, SerieState>(
                           builder: (context, SerieState serieState) {
-                            return BlocBuilder<EpisodeBloc, EpisodeState>(
-                              builder: (context, episodeState) {
-                                if (serieState is OneSerieLoadedState && episodeState is EpisodeLoadedState) {
+                                if (serieState is OneSerieLoadedState ) {
                                   // Dynamically pass tabs and screens
                                   return MenuWidget(
                                     length: 3,
@@ -161,17 +147,15 @@ class _DetailScreenState extends State<DetailSerieScreen> {
                                     screens: [
                                       HistoireTab(data: serieState.serie.description ?? 'histoire'),
                                       PersonnageTab(data: serieState.serie.characters ?? null ),
-                                      EpisodeTab(serieId: serieState.serie.id ?? 0),
+                                      EpisodeTab(data: serieState.serie.episodes ?? null),
                                     ],
                                   );
                                 } else {
                                   return Center(child: CircularProgressIndicator());
                                 }
                               },
-                            );
-                          },
+                            ),
                         ),
-                      ),
                     ]
                 )
               ]

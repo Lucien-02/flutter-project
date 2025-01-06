@@ -79,7 +79,7 @@ class ApiManager {
   }
 
 
-  Future<EpisodesListResponse> loadEpisodesBySerie({
+  Future<EpisodeResponseAPI> loadEpisodeWithCustomUrl({
     required String baseUrl,
     String? fieldList,
     String? filter,
@@ -97,7 +97,7 @@ class ApiManager {
         'filter': filter,
       },
     );
-    return EpisodesListResponse.fromJson(response.data);
+    return EpisodeResponseAPI.fromJson(response.data);
   }
 
 

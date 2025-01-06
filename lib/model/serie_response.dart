@@ -8,6 +8,7 @@ class SerieResponse {
   final String? aliases;
   final String? apiDetailUrl;
   final List<dynamic>? characters;
+  final List<dynamic>? episodes;
   final int? countOfEpisodes;
   final String? dateAdded;
   final String? dateLastUpdated;
@@ -26,6 +27,7 @@ class SerieResponse {
     required this.aliases,
     required this.apiDetailUrl,
     required this.characters,
+    required this.episodes,
     required this.countOfEpisodes,
     required this.dateAdded,
     required this.dateLastUpdated,
@@ -46,6 +48,7 @@ class SerieResponse {
       aliases: json['aliases'],
       apiDetailUrl: json['api_detail_url'],
       characters: json['characters'],
+      episodes: json['episodes'],
       countOfEpisodes: json['count_of_episodes'],
       dateAdded: json['date_added'],
       dateLastUpdated: json['date_last_updated'],
