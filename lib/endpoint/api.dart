@@ -14,5 +14,6 @@ abstract class Api {
     @Query('format') required String format,
     @Query('field_list') String? fieldList,
     @Query('limit') int? limit,
+    @Query('offset') int? offset,
   });
 }
