@@ -19,43 +19,43 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final TextTheme customTextTheme = GoogleFonts.nunitoTextTheme().copyWith(
-    displayLarge: TextStyle(
+    displayLarge: const TextStyle(
       color: Colors.white,
       fontSize: 30,
       fontWeight: FontWeight.w700,
     ),
-    headlineLarge: TextStyle(
+    headlineLarge: const TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.w700,
       fontSize: 20.0,
     ),
-    headlineMedium: TextStyle(
+    headlineMedium: const TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.w700,
       fontSize: 17.0,
     ),
-    headlineSmall: TextStyle(
+    headlineSmall: const TextStyle(
       color: Colors.white,
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
     ),
-    labelLarge : TextStyle(
+    labelLarge : const TextStyle(
         color: Colors.white,
         fontSize: 22.0,
         fontWeight: FontWeight.w900
     ),
-    labelMedium: TextStyle(
+    labelMedium: const TextStyle(
         color: Colors.white,
         fontSize: 15,
         fontWeight: FontWeight.w400,
         fontStyle: FontStyle.italic
     ),
-    labelSmall : TextStyle(
+    labelSmall : const TextStyle(
         color: Colors.white,
         fontSize: 14.0,
         fontWeight: FontWeight.w400
     ),
-    bodyMedium: TextStyle(
+    bodyMedium: const TextStyle(
         color: Colors.white,
         fontSize: 12.0,
         fontWeight: FontWeight.w400
