@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "writer": "Writer",
+  "penciler": "Penciler",
+  "inker": "Inker",
+  "editor": "Editor",
+  "letterer": "Letterer",
+  "cover": "Cover",
+  "artist": "Artist"
+}

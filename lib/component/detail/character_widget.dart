@@ -1,54 +1,26 @@
-import 'package:comics_app/bloc/person_bloc.dart';
-//import 'package:comics_app/localization.dart';
+import 'package:comics_app/bloc/character_bloc.dart';
 import 'package:comics_app/manager/api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../generated/l10n.dart';
+class CharacterWidget extends StatelessWidget {
+  final String character_url;
 
-class PersonWidget extends StatelessWidget {
-  final String person_url;
-  final String role;
-
-  const PersonWidget({
+  const CharacterWidget({
     super.key,
-    required this.person_url,
-    required this.role,
+    required this.character_url,
   });
 
   @override
   Widget build(BuildContext context) {
     final apiManager = ApiManager();
-    final localizations = S.of(context);
-
-    //String translatedRole = localizations?.translateRoles(role) ?? role;
-    String translatedRole = role.split(',').map((role) {
-      switch (role.trim().toLowerCase()) {
-        case 'writer':
-          return localizations.writer;
-        case 'penciler':
-          return localizations.penciler;
-        case 'inker':
-          return localizations.inker;
-        case 'editor':
-          return localizations.editor;
-        case 'letterer':
-          return localizations.letterer;
-        case 'cover':
-          return localizations.cover;
-        case 'artist':
-          return localizations.artist;
-        default:
-          return role; // Return the original role if not found
-      }
-    }).join(', ');
-
     return BlocProvider(
-      create: (context) => PersonBloc(apiManager)
+      create: (context) => CharacterBloc(apiManager)
         ..add(
-          LoadPersonEvent(
-            baseUrl: person_url,
-            fieldList: 'id,image,name,api_detail_url',
+          LoadCharacterEvent(
+            baseUrl: character_url,
+            fieldList: 'id,image,name,api_detail_url,role',
+            // filter: 'id:${character_id}',
           ),
         ),
       child: Container(
@@ -59,14 +31,14 @@ class PersonWidget extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BlocBuilder<PersonBloc, PersonState>(
-                  builder: (context, PersonState state) {
-                    if (state is PersonLoadingState) {
+                BlocBuilder<CharacterBloc, CharacterState>(
+                  builder: (context, CharacterState state) {
+                    if (state is CharacterLoadingState) {
                       return Center(child: CircularProgressIndicator());
-                    } else if (state is PersonLoadedState) {
-                      final person = state.person;
+                    } else if (state is CharacterLoadedState) {
+                      final character = state.character;
 
-                      if (person != null) {
+                      if (character != null) {
                         return GestureDetector(
                             onTap: () {
 
@@ -81,8 +53,8 @@ class PersonWidget extends StatelessWidget {
                                     CircleAvatar(
                                       radius: 25,
                                       backgroundImage: NetworkImage(
-                                        person.image?.iconUrl?.isNotEmpty ?? false
-                                            ? person.image?.iconUrl ??
+                                        character.image?.iconUrl?.isNotEmpty ?? false
+                                            ? character.image?.iconUrl ??
                                             "https://comicvine.gamespot.com/a/uploads/scale_avatar/6/67663/6238345-3060875932-35677.jpg"
                                             : "https://comicvine.gamespot.com/a/uploads/scale_avatar/6/67663/6238345-3060875932-35677.jpg",
                                       ),
@@ -96,15 +68,8 @@ class PersonWidget extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              person.name ?? ' ',
+                                              character.name ?? ' ',
                                               style: TextStyle(fontSize: 14, color: Colors.white),
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            SizedBox(height: 4),
-                                            Text(
-                                              translatedRole ?? '',
-                                              style: TextStyle(fontSize: 12, color: Colors.white70),
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -120,12 +85,12 @@ class PersonWidget extends StatelessWidget {
                       } else {
                         return Center(
                           child: Text(
-                            'Erreur : Auteur non existant',
+                            'Erreur : Personnage non existant',
                             style: TextStyle(fontSize: 11, color: Colors.white),
                           ),
                         );
                       }
-                    } else if (state is PersonErrorState) {
+                    } else if (state is CharacterErrorState) {
                       return Center(
                         child: Text(
                           'Erreur : ${state.message}',
@@ -135,7 +100,7 @@ class PersonWidget extends StatelessWidget {
                     } else {
                       return Center(
                         child: Text(
-                          'Veuillez charger l auteur.',
+                          'Veuillez charger la série.',
                           style: TextStyle(fontSize: 11, color: Colors.white),
                         ),
                       );

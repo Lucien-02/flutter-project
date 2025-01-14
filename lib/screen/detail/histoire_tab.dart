@@ -8,6 +8,15 @@ class HistoireTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (data!.isEmpty) {
+      // Display message if data is null or empty
+      return Center(
+        child: Text(
+          "Pas d'histoire",
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+      );
+    }
     return HistoryWidget(history:data);
   }
 }

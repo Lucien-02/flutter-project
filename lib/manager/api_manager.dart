@@ -1,4 +1,6 @@
 import 'package:comics_app/endpoint/api.dart';
+import 'package:comics_app/model/comic_response.dart';
+import 'package:comics_app/model/person_response.dart';
 import 'package:comics_app/model/series_list_response.dart';
 import 'package:dio/dio.dart';
 
@@ -65,7 +67,8 @@ class ApiManager {
     String? fieldList,
     int? limit,
   }) async {
-    final dio = Dio()..options.baseUrl = baseUrl;
+    final dio = Dio()
+      ..options.baseUrl = baseUrl;
     print(baseUrl);
 
     final response = await dio.get(
@@ -87,7 +90,8 @@ class ApiManager {
     String? filter,
     int? limit,
   }) async {
-    final dio = Dio()..options.baseUrl = baseUrl;
+    final dio = Dio()
+      ..options.baseUrl = baseUrl;
 
     final response = await dio.get(
       '',
@@ -109,7 +113,8 @@ class ApiManager {
     String? filter,
     int? limit,
   }) async {
-    final dio = Dio()..options.baseUrl = baseUrl;
+    final dio = Dio()
+      ..options.baseUrl = baseUrl;
 
     final response = await dio.get(
       '',
@@ -123,5 +128,61 @@ class ApiManager {
     );
 
     return CharacterResponseAPI.fromJson(response.data);
+  }
+
+  Future<ComicListResponse> loadComicListFromAPI({
+    String? fieldList,
+    int? limit,
+    int? offset
+  }) async {
+    return api.loadComics(
+      apiKey: apiKey,
+      format: format,
+      fieldList: fieldList,
+      limit: limit,
+      offset: offset,);
+  }
+
+  Future<ComicResponseAPI> loadComicWithCustomUrl({
+    required String baseUrl,
+    String? fieldList,
+    int? limit,
+  }) async {
+    final dio = Dio()
+      ..options.baseUrl = baseUrl;
+    print(baseUrl);
+
+    final response = await dio.get(
+      '',
+      queryParameters: {
+        'api_key': apiKey,
+        'format': format,
+        'field_list': fieldList,
+        'limit': limit,
+      },
+    );
+    return ComicResponseAPI.fromJson(response.data);
+  }
+
+  Future<PersonResponseAPI> loadPersonWithCustomUrl({
+    required String baseUrl,
+    String? fieldList,
+    String? filter,
+    int? limit,
+  }) async {
+    final dio = Dio()
+      ..options.baseUrl = baseUrl;
+
+    final response = await dio.get(
+      '',
+      queryParameters: {
+        'api_key': apiKey,
+        'format': format,
+        'field_list': fieldList,
+        'limit': limit,
+        //'filter': filter,
+      },
+    );
+    return PersonResponseAPI.fromJson(response.data);
   }
 }
