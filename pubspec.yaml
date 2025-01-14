@@ -42,7 +42,9 @@ dependencies:
   json_annotation: any
   google_fonts: 6.2.1
   flutter_html: ^3.0.0-beta.2
-  intl: ^0.20.1
+  intl: any
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -57,10 +59,13 @@ dev_dependencies:
   retrofit_generator: any
   json_serializable: any
   build_runner: any
+  intl_utils: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+flutter_intl:
+  enabled: true
+  main_locale: fr
 # The following section is specific to Flutter packages.
 flutter:
 

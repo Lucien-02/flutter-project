@@ -1,3 +1,4 @@
+import 'package:comics_app/bloc/comic_bloc.dart';
 import 'package:comics_app/bloc/serie_bloc.dart';
 import 'package:comics_app/manager/api_manager.dart';
 import 'package:flutter/material.dart';
@@ -89,10 +90,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BlocProvider<SerieBloc>(
             create: (_) => SerieBloc(apiManager),
           ),
-          /* BlocProvider<ComicBloc>(
-                      create: (_) => ComicBloc(comicApiManager: ComicApiManager()),
-                    ),
-                    BlocProvider<FilmBloc>(
+          BlocProvider<ComicBloc>(
+            create: (_) => ComicBloc(apiManager),
+          ),
+                    /*BlocProvider<FilmBloc>(
                       create: (_) => FilmBloc(filmApiManager: FilmApiManager()),
                     ),*/
         ],
@@ -100,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
       )
           :
       _currentIndex == 1
-          ? BlocProvider<SerieBloc>(
-        create: (_) => SerieBloc(apiManager),
+          ? BlocProvider<ComicBloc>(
+        create: (_) => ComicBloc(apiManager),
         child: _tabs[_currentIndex],
       ) :
       _currentIndex == 2
