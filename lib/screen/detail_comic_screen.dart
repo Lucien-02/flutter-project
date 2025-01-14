@@ -1,12 +1,8 @@
-import 'package:comics_app/bloc/character_bloc.dart';
 import 'package:comics_app/bloc/comic_bloc.dart';
-import 'package:comics_app/bloc/episode_bloc.dart';
-import 'package:comics_app/bloc/serie_bloc.dart';
 import 'package:comics_app/component/detail/header_widget.dart';
 import 'package:comics_app/component/detail/menu_widget.dart';
 import 'package:comics_app/manager/api_manager.dart';
 import 'package:comics_app/screen/detail/auteur_tab.dart';
-import 'package:comics_app/screen/detail/episode_tab.dart';
 import 'package:comics_app/screen/detail/histoire_tab.dart';
 import 'package:comics_app/screen/detail/personnage_tab.dart';
 import 'package:dio/dio.dart';
