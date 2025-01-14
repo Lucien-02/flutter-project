@@ -62,7 +62,7 @@ class PersonWidget extends StatelessWidget {
                 BlocBuilder<PersonBloc, PersonState>(
                   builder: (context, PersonState state) {
                     if (state is PersonLoadingState) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (state is PersonLoadedState) {
                       final person = state.person;
 
@@ -87,24 +87,24 @@ class PersonWidget extends StatelessWidget {
                                             : "https://comicvine.gamespot.com/a/uploads/scale_avatar/6/67663/6238345-3060875932-35677.jpg",
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 15),
 
 
                                     ConstrainedBox(
-                                        constraints: BoxConstraints(maxWidth: 200),
+                                        constraints: const BoxConstraints(maxWidth: 200),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               person.name ?? ' ',
-                                              style: TextStyle(fontSize: 14, color: Colors.white),
+                                              style: const TextStyle(fontSize: 16, color: Colors.white),
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
                                             ),
-                                            SizedBox(height: 4),
+                                            const SizedBox(height: 4),
                                             Text(
                                               translatedRole ?? '',
-                                              style: TextStyle(fontSize: 12, color: Colors.white70),
+                                              style: const TextStyle(fontSize: 14, color: Colors.white70, fontStyle: FontStyle.italic),
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -118,7 +118,7 @@ class PersonWidget extends StatelessWidget {
                             )
                         );
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text(
                             'Erreur : Auteur non existant',
                             style: TextStyle(fontSize: 11, color: Colors.white),
@@ -129,11 +129,11 @@ class PersonWidget extends StatelessWidget {
                       return Center(
                         child: Text(
                           'Erreur : ${state.message}',
-                          style: TextStyle(fontSize: 11, color: Colors.white),
+                          style: const TextStyle(fontSize: 11, color: Colors.white),
                         ),
                       );
                     } else {
-                      return Center(
+                      return const Center(
                         child: Text(
                           'Veuillez charger l auteur.',
                           style: TextStyle(fontSize: 11, color: Colors.white),

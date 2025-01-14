@@ -34,7 +34,7 @@ class CharacterWidget extends StatelessWidget {
                 BlocBuilder<CharacterBloc, CharacterState>(
                   builder: (context, CharacterState state) {
                     if (state is CharacterLoadingState) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (state is CharacterLoadedState) {
                       final character = state.character;
 
@@ -59,17 +59,15 @@ class CharacterWidget extends StatelessWidget {
                                             : "https://comicvine.gamespot.com/a/uploads/scale_avatar/6/67663/6238345-3060875932-35677.jpg",
                                       ),
                                     ),
-                                    SizedBox(width: 10),
-
-
+                                    const SizedBox(width: 15),
                                     ConstrainedBox(
-                                        constraints: BoxConstraints(maxWidth: 200),
+                                        constraints: const BoxConstraints(maxWidth: 200),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               character.name ?? ' ',
-                                              style: TextStyle(fontSize: 14, color: Colors.white),
+                                              style: const TextStyle(fontSize: 16, color: Colors.white),
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -83,7 +81,7 @@ class CharacterWidget extends StatelessWidget {
                             )
                         );
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text(
                             'Erreur : Personnage non existant',
                             style: TextStyle(fontSize: 11, color: Colors.white),
@@ -94,11 +92,11 @@ class CharacterWidget extends StatelessWidget {
                       return Center(
                         child: Text(
                           'Erreur : ${state.message}',
-                          style: TextStyle(fontSize: 11, color: Colors.white),
+                          style: const TextStyle(fontSize: 11, color: Colors.white),
                         ),
                       );
                     } else {
-                      return Center(
+                      return const Center(
                         child: Text(
                           'Veuillez charger la série.',
                           style: TextStyle(fontSize: 11, color: Colors.white),

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class PersonnageTab extends StatelessWidget {
   final List<dynamic>? data;
 
-  const PersonnageTab({required this.data, Key? key}) : super(key: key);
+  const PersonnageTab({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
     if (data == null || data!.isEmpty) {
       // Display message if data is null or empty
-      return Center(
+      return const Center(
         child: Text(
           "Pas de personnages",
           style: TextStyle(fontSize: 16, color: Colors.white),
@@ -30,7 +30,7 @@ class PersonnageTab extends StatelessWidget {
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: Text(
               'Error: Pas de personnage',
               style: TextStyle(fontSize: 11, color: Colors.white),

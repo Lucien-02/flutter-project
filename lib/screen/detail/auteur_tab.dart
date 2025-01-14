@@ -1,4 +1,3 @@
-import 'package:comics_app/component/detail/character_widget.dart';
 import 'package:comics_app/component/detail/person_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,7 @@ class AuteurTab extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data == null || data!.isEmpty) {
       // Display message if data is null or empty
-      return Center(
+      return const Center(
         child: Text(
           "Pas d'auteurs",
           style: TextStyle(fontSize: 16, color: Colors.white),
@@ -32,7 +31,7 @@ class AuteurTab extends StatelessWidget {
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: Text(
               'Error: Pas de personnage',
               style: TextStyle(fontSize: 11, color: Colors.white),
