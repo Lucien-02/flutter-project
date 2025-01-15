@@ -43,8 +43,8 @@ class CardWidget extends StatelessWidget {
               route_name = '/comic-detail';
               params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
               break;
-            case 'movie':
-              route_name = '/serie-detail';
+            case 'film':
+              route_name = '/film-detail';
               params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
               break;
             default:
