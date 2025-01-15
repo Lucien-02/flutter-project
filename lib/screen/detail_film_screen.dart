@@ -1,9 +1,9 @@
-import 'package:comics_app/bloc/comic_bloc.dart';
+import 'package:comics_app/bloc/film_bloc.dart';
 import 'package:comics_app/component/detail/header_widget.dart';
 import 'package:comics_app/component/detail/menu_widget.dart';
 import 'package:comics_app/manager/api_manager.dart';
-import 'package:comics_app/screen/detail/auteur_tab.dart';
 import 'package:comics_app/screen/detail/histoire_tab.dart';
+import 'package:comics_app/screen/detail/info_tab.dart';
 import 'package:comics_app/screen/detail/personnage_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 
-class DetailComicScreen extends StatefulWidget {
+class DetailFilmScreen extends StatefulWidget {
 
   final String title;
   final String url;
@@ -19,7 +19,7 @@ class DetailComicScreen extends StatefulWidget {
   final String imageUrl;
 
 
-  const DetailComicScreen({
+  const DetailFilmScreen({
     super.key,
     required this.id,
     required this.title,
@@ -28,32 +28,53 @@ class DetailComicScreen extends StatefulWidget {
   });
 
   @override
-  State<DetailComicScreen> createState() => _DetailComicScreenState();
+  State<DetailFilmScreen> createState() => _DetailFilmScreenState();
 }
 
-class _DetailComicScreenState extends State<DetailComicScreen> {
+class _DetailFilmScreenState extends State<DetailFilmScreen> {
 
 
   String formatDate(String date) {
     try {
       DateTime dateTime = DateTime.parse(date);
-      return DateFormat("MMMM y", "fr_FR").format(dateTime);
+      return DateFormat("y", "fr_FR").format(dateTime);
     } catch (e) {
       return date;
     }
+  }
+
+  String formatMoney(String amount) {
+    print(amount);
+    if(amount.isEmpty) {
+      return "Pas de montant existant";
+    }
+    int number = int.parse(amount);
+
+    if (number >= 1000000) {
+      double millions = number / 1000000;
+      return '${millions.toStringAsFixed(0)} millions \$';
+    }
+    return '\$${number.toString()}';
+  }
+
+  String formatList(List<dynamic>? list) {
+    if (list == null || list.isEmpty) {
+      return "Pas d'infos disponibles"; // Fallback message if the list is empty or null
+    }
+    List<String> listNames = list.map((item) => item['name'] as String).toList();
+    return "${listNames.join(', ')}";
   }
 
   @override
   Widget build(BuildContext context) {
     final apiManager = ApiManager(dio:Dio(), baseUrl: widget.url);
     final TextTheme textTheme = Theme.of(context).textTheme;
-    print(widget.id);
     return
-      BlocProvider(create: (_) => ComicBloc(apiManager)
+      BlocProvider(create: (_) => FilmBloc(apiManager)
         ..add(
-            LoadComicWithCustomUrlEvent(
+            LoadFilmWithCustomUrlEvent(
               baseUrl: widget.url,
-              fieldList: 'id,image,name,character_credits,api_detail_url,issue_number,description,person_credits,cover_date,date_added',
+              fieldList: 'id,image,name,rating,api_detail_url,release_date,description,runtime,total_revenue,date_added,writers,studios,producers,characters,budget,box_office_revenue',
             )
         ),
 
@@ -97,17 +118,17 @@ class _DetailComicScreenState extends State<DetailComicScreen> {
                   Column(
                       children: [
                         SizedBox(height: MediaQuery.of(context).size.height*0.1,),
-                        BlocBuilder<ComicBloc, ComicState>(
-                          builder: (context, ComicState state) {
-                            if (state is ComicLoadingState) {
+                        BlocBuilder<FilmBloc, FilmState>(
+                          builder: (context, FilmState state) {
+                            if (state is FilmLoadingState) {
                               return Center(child: CircularProgressIndicator());
-                            } else if (state is OneComicLoadedState) {
-                              final comic = state.comic;
+                            } else if (state is OneFilmLoadedState) {
+                              final film = state.film;
 
-                              final formattedDate = formatDate(comic.dateAdded ?? "");
+                              final formattedDate = formatDate(film.dateAdded ?? "");
                               final List<Map<IconData, String>> iconTextPairs = [
                                 {
-                                  Icons.book:  "N° ${comic.issueNumber ?? ' '}",
+                                  Icons.book:  "${film.runtime ?? ' '} minutes",
                                 },
                                 {
                                   Icons.calendar_today: formattedDate,
@@ -117,17 +138,17 @@ class _DetailComicScreenState extends State<DetailComicScreen> {
                                 padding: const EdgeInsets.all(16),
                                 child: HeaderWidget(
                                     keyValuePairs: iconTextPairs,
-                                    imageUrl: comic.image?.smallUrl ?? ""),
+                                    imageUrl: film.image?.smallUrl ?? ""),
                               );
 
-                            } else if (state is ComicErrorState) {
+                            } else if (state is FilmErrorState) {
                               return Center(child: Text('Error: ${state.message}',style: TextStyle(
                                   fontSize: 11,
                                   color: Colors.white)));
                             } else {
                               return Center(
                                   child: Text(
-                                      'Please load the comic.',
+                                      'Please load the film.',
                                       style: TextStyle(
                                           fontSize: 11,
                                           color: Colors.white)
@@ -138,21 +159,48 @@ class _DetailComicScreenState extends State<DetailComicScreen> {
                           },
                         ),
                         Expanded(
-                          child: BlocBuilder<ComicBloc, ComicState>(
-                            builder: (context, ComicState comicState) {
-                              if (comicState is OneComicLoadedState ) {
+                          child: BlocBuilder<FilmBloc, FilmState>(
+                            builder: (context, FilmState filmState) {
+                              if (filmState is OneFilmLoadedState ) {
+                                print(filmState.film.totalRevenue);
+                                final List<Map<String, String>> cleTextPairs = [
+                                  {
+                                    "Classification" :  "${filmState.film.rating ?? ''}",
+                                  },
+                                  /*{
+                                    "Réalisateur": formattedDate,
+                                  },*/
+                                  {
+                                    "Scénaristes": formatList(filmState.film.writers),
+                                  },
+                                  {
+                                    "Producteurs": formatList(filmState.film.producers),
+                                  },
+                                  {
+                                    "Studios": formatList(filmState.film.studios),
+                                  },
+                                  {
+                                    "Budget": formatMoney(filmState.film.budget ?? ''),
+                                  },
+                                  {
+                                    "Recettes au box-office": formatMoney(filmState.film.boxOfficeRevenue ?? ''),
+                                  },
+                                  {
+                                    "Recettes brutes totales": formatMoney(filmState.film.totalRevenue ?? ''),
+                                  },
+                                ];
                                 // Dynamically pass tabs and screens
                                 return MenuWidget(
                                   length: 3,
                                   tabs: [
-                                    Tab(text: 'Histoire'),
-                                    Tab(text: 'Auteurs'),
+                                    Tab(text: 'Synopsis'),
                                     Tab(text: 'Personnages'),
+                                    Tab(text: 'Infos'),
                                   ],
                                   screens: [
-                                    HistoireTab(data: comicState.comic.description ?? ""),
-                                    AuteurTab(data: comicState.comic.personCredits ?? null),
-                                    PersonnageTab(data: comicState.comic.characterCredits ?? null ),
+                                    HistoireTab(data: filmState.film.description ?? ""),
+                                    PersonnageTab(data: filmState.film.characters ?? null ),
+                                    InfoTab(cleValuePairs: cleTextPairs),
 
                                   ],
                                 );

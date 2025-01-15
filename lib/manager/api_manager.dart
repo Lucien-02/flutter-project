@@ -1,5 +1,6 @@
 import 'package:comics_app/endpoint/api.dart';
 import 'package:comics_app/model/comic_response.dart';
+import 'package:comics_app/model/film_response.dart';
 import 'package:comics_app/model/person_response.dart';
 import 'package:comics_app/model/series_list_response.dart';
 import 'package:dio/dio.dart';
@@ -184,5 +185,38 @@ class ApiManager {
       },
     );
     return PersonResponseAPI.fromJson(response.data);
+  }
+
+  Future<FilmListResponse> loadFilmListFromAPI({
+    String? fieldList,
+    int? limit,
+    int? offset
+  }) async {
+    return api.loadFilms(
+      apiKey: apiKey,
+      format: format,
+      fieldList: fieldList,
+      limit: limit,
+      offset: offset,);
+  }
+
+  Future<FilmResponseAPI> loadFilmWithCustomUrl({
+    required String baseUrl,
+    String? fieldList,
+    int? limit,
+  }) async {
+    final dio = Dio()
+      ..options.baseUrl = baseUrl;
+
+    final response = await dio.get(
+      '',
+      queryParameters: {
+        'api_key': apiKey,
+        'format': format,
+        'field_list': fieldList,
+        'limit': limit,
+      },
+    );
+    return FilmResponseAPI.fromJson(response.data);
   }
 }
