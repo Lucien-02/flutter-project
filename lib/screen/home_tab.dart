@@ -1,4 +1,5 @@
 
+import 'package:comics_app/component/item_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
@@ -6,14 +7,20 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         Expanded(
           child: Center(
-            child: Text(
-              'Contenu de la section Films',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
-            ),
+            child: 
+            // Text(
+            //   'Contenu de la section Films',
+            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+            // ),
+            Column(
+              children: [
+                ItemWidget(imageUrl: 'https://www.carrementfleurs.com/modules/prestablog/views/img/grid-for-1-7/up-img/86.jpg', title: "title", subtitle: "testqrgqergqergqertgrtg",)
+              ],
+            )
           ),
         ),
       ],
