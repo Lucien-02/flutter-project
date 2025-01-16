@@ -1,5 +1,7 @@
 
+import 'package:comics_app/component/horizontal_item_list_widget.dart';
 import 'package:comics_app/component/item_widget.dart';
+import 'package:comics_app/screen/series_tab.dart';
 import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
@@ -7,24 +9,76 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: 
-            // Text(
-            //   'Contenu de la section Films',
-            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
-            // ),
-            Column(
-              children: [
-                ItemWidget(imageUrl: 'https://www.carrementfleurs.com/modules/prestablog/views/img/grid-for-1-7/up-img/86.jpg', title: "title", subtitle: "testqrgqergqergqertgrtg",)
-              ],
-            )
-          ),
-        ),
-      ],
-    );
+    final List<Map<String, String>> items = [
+      {
+        'imageUrl': '',
+        'title': 'Série 1',
+        'subtitle': 'Description 1',
+      },
+      {
+        'imageUrl': '',
+        'title': 'Série 2',
+        'subtitle': 'Description 2',
+      },
+      {
+        'imageUrl': '',
+        'title': 'Série 3',
+        'subtitle': 'Description 3',
+      },
+      {
+        'imageUrl': '',
+        'title': 'Série 4',
+        'subtitle': 'Description 4',
+      },
+      {
+        'imageUrl': '',
+        'title': 'Série 5',
+        'subtitle': 'Description 5',
+      },
+    ];
+    return SingleChildScrollView(
+  child: Column(
+    spacing: 15,
+    children: [
+      HorizontalItemList(
+        title: 'Séries populaires',
+        items: items,
+        onVoirPlus: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SeriesTab(),
+            ),
+          );
+        },
+      ),
+      HorizontalItemList(
+        title: 'Comics populaires',
+        items: items,
+        onVoirPlus: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SeriesTab(),
+            ),
+          );
+        },
+      ),
+      HorizontalItemList(
+        title: 'Films populaires',
+        items: items,
+        onVoirPlus: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SeriesTab(),
+            ),
+          );
+        },
+      ),
+    ],
+  ),
+);
   }
 
 /*@override
