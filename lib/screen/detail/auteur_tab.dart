@@ -34,7 +34,7 @@ class AuteurTab extends StatelessWidget {
         } else {
           return Center(
             child: Text(
-              'Error: Pas de personnage',
+              "Pas d'auteurs",
               style: TextStyle(fontSize: 11, color: Colors.white),
             ),
           );

@@ -21,7 +21,7 @@ CharacterResponse _$CharacterResponseFromJson(Map<String, dynamic> json) =>
           ? null
           : FirstAppearedInIssue.fromJson(
               json['firstAppearedInIssue'] as Map<String, dynamic>),
-      gender: json['gender'] as String?,
+      gender: (json['gender'] as num?)?.toInt(),
       id: (json['id'] as num?)?.toInt(),
       image: json['image'] == null
           ? null
@@ -35,6 +35,7 @@ CharacterResponse _$CharacterResponseFromJson(Map<String, dynamic> json) =>
           : Publisher.fromJson(json['publisher'] as Map<String, dynamic>),
       realName: json['realName'] as String?,
       siteDetailUrl: json['siteDetailUrl'] as String?,
+      creators: json['creators'] as List<dynamic>?,
     );
 
 Map<String, dynamic> _$CharacterResponseToJson(CharacterResponse instance) =>
@@ -56,6 +57,7 @@ Map<String, dynamic> _$CharacterResponseToJson(CharacterResponse instance) =>
       'publisher': instance.publisher,
       'realName': instance.realName,
       'siteDetailUrl': instance.siteDetailUrl,
+      'creators': instance.creators,
     };
 
 FirstAppearedInIssue _$FirstAppearedInIssueFromJson(

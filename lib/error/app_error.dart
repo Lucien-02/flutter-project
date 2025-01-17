@@ -29,11 +29,10 @@ class AppError {
             );
           } else if (error.response!.statusCode == 420) {
             return AppError(
-              message: "Limite de vitesse dépassée. Veuillez réessayer plus tard.",
+              message: "Dépassement de la limite de taux de requetes. Veuillez réessayer plus tard.",
               code: error.response?.statusCode,
             );
-          }
-          else {
+          } else {
             return AppError(
               message:
               "Erreur du serveur : ${error.response?.statusCode ?? 'Inconnue'}.",

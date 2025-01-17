@@ -1,6 +1,7 @@
 import 'package:comics_app/screen/demo_request_screen.dart';
 import 'package:comics_app/screen/detail_comic_screen.dart';
 import 'package:comics_app/screen/detail_film_screen.dart';
+import 'package:comics_app/screen/detail_personnage_screen.dart';
 import 'package:comics_app/screen/detail_serie_screen.dart';
 import 'package:comics_app/screen/home_screen.dart';
 import 'package:comics_app/theme/app_colors.dart';
@@ -89,6 +90,14 @@ class MyApp extends StatelessWidget {
             builder: (BuildContext context, GoRouterState state) {
               final data = state.extra! as Map<String,dynamic>;
               return DetailFilmScreen(id: data["id"], title: data["title"], url: data["url"], imageUrl: data["imageUrl"]);
+            }
+
+        ),
+        GoRoute(
+            path: '/personnage-detail',
+            builder: (BuildContext context, GoRouterState state) {
+              final data = state.extra! as Map<String,dynamic>;
+              return DetailPersonnageScreen(title: data["title"], url: data["url"], imageUrl: data["imageUrl"]);
             }
 
         ),

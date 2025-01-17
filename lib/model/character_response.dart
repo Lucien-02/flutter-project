@@ -14,7 +14,7 @@ class CharacterResponse {
   final String? dateAdded;
   final String? dateLastUpdated;
   final FirstAppearedInIssue? firstAppearedInIssue;
-  final String? gender;
+  final int? gender;
   final int? id;
   final Image? image;
   final String? name;
@@ -22,6 +22,7 @@ class CharacterResponse {
   final Publisher? publisher;
   final String? realName;
   final String? siteDetailUrl;
+  final List<dynamic>? creators;
 
   CharacterResponse({
     required this.aliases,
@@ -41,6 +42,7 @@ class CharacterResponse {
     required this.publisher,
     required this.realName,
     required this.siteDetailUrl,
+    required this.creators,
   });
 
   factory CharacterResponse.fromJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class CharacterResponse {
       realName: json['real_name'],
       name: json['name'],
       siteDetailUrl: json['site_detail_url'],
+        creators:json['creators'],
     );
   }
 

@@ -37,13 +37,11 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
         AppError appError;
 
         if (error is DioException) {
-          print('ici1');
           appError = AppError.fromDioError(error);
         } else if (error is FormatException) {
-          print('ici2');
           appError = AppError.formatException();
         } else {
-          print('ici3');
+          print(error);
           appError = AppError.generic("Une erreur inconnue est survenue.");
         }
         print(appError.message);
