@@ -2,6 +2,7 @@ import 'package:comics_app/bloc/character_bloc.dart';
 import 'package:comics_app/manager/api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CharacterWidget extends StatelessWidget {
   final String character_url;
@@ -19,7 +20,7 @@ class CharacterWidget extends StatelessWidget {
         ..add(
           LoadCharacterEvent(
             baseUrl: character_url,
-            fieldList: 'id,image,name,api_detail_url,role',
+            fieldList: 'id,image,name,api_detail_url',
             // filter: 'id:${character_id}',
           ),
         ),
@@ -39,9 +40,10 @@ class CharacterWidget extends StatelessWidget {
                       final character = state.character;
 
                       if (character != null) {
+                        final imageUrl = character.image?.smallUrl ?? "";
                         return GestureDetector(
                             onTap: () {
-
+                              GoRouter.of(context).push('/personnage-detail',extra: { "title":character.name,"url":character.apiDetailUrl,"imageUrl":imageUrl});
                             },
                             child: Container(
                               child: Padding(
