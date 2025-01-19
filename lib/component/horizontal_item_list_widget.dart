@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 class HorizontalItemList extends StatelessWidget {
   final String title; 
   final List<Map<String, String>> items;
-  final VoidCallback onVoirPlus; 
+  final bool btnVoirPlus;
+  final VoidCallback? onVoirPlus; 
 
   const HorizontalItemList({
     super.key,
     required this.title,
     required this.items,
-    required this.onVoirPlus,
+    this.onVoirPlus,
+    required this.btnVoirPlus,
   });
 
   @override
@@ -53,6 +55,7 @@ class HorizontalItemList extends StatelessWidget {
                   ),
                 ],
               ),
+              btnVoirPlus ?
               TextButton(
                 style: TextButton.styleFrom( 
                   fixedSize: const Size(92, 32)   ,              
@@ -69,7 +72,8 @@ class HorizontalItemList extends StatelessWidget {
                     fontSize: 14
                     ),
                 ),
-              ),
+              ): 
+              Container()
             ],
           ),
         ),

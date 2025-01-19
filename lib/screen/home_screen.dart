@@ -45,78 +45,79 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.backgroundScreen,
       appBar: _currentIndex == 0
           ? PreferredSize(
-        preferredSize: Size.fromHeight(160),
-        child: AppBar(
-          backgroundColor: Colors.transparent,
-          toolbarHeight: 160,
-          elevation: 0,
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(left: 32.0, top: 34.0),
-            // Adds top and left padding
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Bienvenue !',
-                style: textTheme.displayLarge,
-              ),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, right: 9.5),
-              child: GestureDetector(
-                onTap: () {},
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    SizedBox(
-                      width: 122,
-                      height: 160,
-                      child: SvgPicture.asset(
-                        'assets/icons/astronaut.svg',
-                        fit: BoxFit.fill,
+              preferredSize: Size.fromHeight(160),
+              child: AppBar(
+                backgroundColor: Colors.transparent,
+                toolbarHeight: 160,
+                elevation: 0,
+                flexibleSpace: Padding(
+                  padding: const EdgeInsets.only(left: 32.0, top: 34.0),
+                  // Adds top and left padding
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Bienvenue !',
+                      style: textTheme.displayLarge,
+                    ),
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0, right: 9.5),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          SizedBox(
+                            width: 122,
+                            height: 160,
+                            child: SvgPicture.asset(
+                              'assets/icons/astronaut.svg',
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      )
+            )
           : null,
       body: _currentIndex == 0
           ? MultiBlocProvider(
-        providers: [
-          BlocProvider<SerieBloc>(
-            create: (_) => SerieBloc(apiManager),
-          ),
-          BlocProvider<ComicBloc>(
-            create: (_) => ComicBloc(apiManager),
-          ),
-          BlocProvider<FilmBloc>(
-            create: (_) => FilmBloc(apiManager),
-          ),
-        ],
-        child: _tabs[_currentIndex],
-      )
-          :
-      _currentIndex == 1
-          ? BlocProvider<ComicBloc>(
-        create: (_) => ComicBloc(apiManager),
-        child: _tabs[_currentIndex],
-      ) :
-      _currentIndex == 2
-          ? BlocProvider<SerieBloc>(
-        create: (_) => SerieBloc(apiManager),
-        child: _tabs[_currentIndex],
-      ) :
-      _currentIndex == 3
-          ? BlocProvider<FilmBloc>(
-        create: (_) => FilmBloc(apiManager),
-        child: _tabs[_currentIndex],
-      )
-          : _tabs[_currentIndex],
+              providers: [
+                BlocProvider<SerieBloc>(
+                  create: (_) =>
+                      SerieBloc(apiManager)..add(LoadSerieListEvent()),
+                ),
+                BlocProvider<ComicBloc>(
+                  create: (_) =>
+                      ComicBloc(apiManager)..add(LoadComicListEvent()),
+                ),
+                BlocProvider<FilmBloc>(
+                  create: (_) => FilmBloc(apiManager)..add(LoadFilmListEvent()),
+                ),
+              ],
+              child: _tabs[_currentIndex],
+            )
+          : _currentIndex == 1
+              ? BlocProvider<ComicBloc>(
+                  create: (_) => ComicBloc(apiManager),
+                  child: _tabs[_currentIndex],
+                )
+              : _currentIndex == 2
+                  ? BlocProvider<SerieBloc>(
+                      create: (_) => SerieBloc(apiManager),
+                      child: _tabs[_currentIndex],
+                    )
+                  : _currentIndex == 3
+                      ? BlocProvider<FilmBloc>(
+                          create: (_) => FilmBloc(apiManager),
+                          child: _tabs[_currentIndex],
+                        )
+                      : _tabs[_currentIndex],
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
@@ -163,7 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 24,
                       colorFilter: const ColorFilter.mode(
                           AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ), label: "Comics"),
+                    ),
+                    label: "Comics"),
                 BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       'assets/icons/navbar_series.svg',
@@ -178,7 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 24,
                       colorFilter: const ColorFilter.mode(
                           AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ), label: "Séries"),
+                    ),
+                    label: "Séries"),
                 BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       'assets/icons/navbar_movies.svg',
@@ -193,7 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 24,
                       colorFilter: const ColorFilter.mode(
                           AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ), label: "Films"),
+                    ),
+                    label: "Films"),
                 BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       'assets/icons/navbar_search.svg',
@@ -208,14 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 24,
                       colorFilter: const ColorFilter.mode(
                           AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ), label: "Recherche"),
-              ]
-          ),
-
+                    ),
+                    label: "Recherche"),
+              ]),
         ),
       ),
     );
   }
 }
-
-
