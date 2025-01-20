@@ -1,50 +1,61 @@
 import 'package:comics_app/bloc/comic_bloc.dart';
 import 'package:comics_app/bloc/film_bloc.dart';
 import 'package:comics_app/bloc/serie_bloc.dart';
+import 'package:comics_app/bloc/tab_bloc.dart';
 import 'package:comics_app/manager/api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../theme/app_colors.dart';
 import 'home_tab.dart';
 import 'comics_tab.dart';
 import 'series_tab.dart';
 import 'films_tab.dart';
 import 'search_tab.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
+class HomeScreen extends StatelessWidget {
   final List<Widget> _tabs = [
     HomeTab(),
-    ComicsTab(),
-    SeriesTab(),
-    FilmsTab(),
+    BlocProvider(
+      create: (_) => ComicBloc(ApiManager())..add(
+        LoadComicListEvent(
+          fieldList: 'id,image,name,issue_number,api_detail_url,date_added',
+        ),
+      ),
+      child: ComicsTab(),
+    ),
+    BlocProvider(
+      create: (context) => SerieBloc(ApiManager())..add(
+        LoadSerieListEvent(
+          fieldList: 'id,image,name,publisher,count_of_episodes,start_year,api_detail_url',
+        ),
+      ),
+      child: SeriesTab(),
+    ),
+    //SeriesTab(),
+    BlocProvider(
+      create: (_) => FilmBloc(ApiManager())..add(
+        LoadFilmListEvent(
+          fieldList: 'id,image,name,runtime,api_detail_url,date_added',
+        ),
+      ),
+      child: FilmsTab(),
+    ),
     SearchTab(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final apiManager = ApiManager();
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundScreen,
-      appBar: _currentIndex == 0
-          ? PreferredSize(
+    return BlocProvider(
+      create: (context) => TabBloc(),
+      child: BlocBuilder<TabBloc, TabState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColors.backgroundScreen,
+            appBar: state.currentIndex == 0
+                ? PreferredSize(
               preferredSize: Size.fromHeight(160),
               child: AppBar(
                 backgroundColor: Colors.transparent,
@@ -52,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 elevation: 0,
                 flexibleSpace: Padding(
                   padding: const EdgeInsets.only(left: 32.0, top: 34.0),
-                  // Adds top and left padding
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -83,139 +93,126 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
+              
             )
-          : null,
-      body: _currentIndex == 0
-          ? MultiBlocProvider(
-              providers: [
-                BlocProvider<SerieBloc>(
-                  create: (_) =>
-                      SerieBloc(apiManager)..add(LoadSerieListEvent()),
-                ),
-                BlocProvider<ComicBloc>(
-                  create: (_) =>
-                      ComicBloc(apiManager)..add(LoadComicListEvent()),
-                ),
-                BlocProvider<FilmBloc>(
-                  create: (_) => FilmBloc(apiManager)..add(LoadFilmListEvent()),
-                ),
-              ],
-              child: _tabs[_currentIndex],
-            )
-          : _currentIndex == 1
-              ? BlocProvider<ComicBloc>(
-                  create: (_) => ComicBloc(apiManager),
-                  child: _tabs[_currentIndex],
-                )
-              : _currentIndex == 2
-                  ? BlocProvider<SerieBloc>(
-                      create: (_) => SerieBloc(apiManager),
-                      child: _tabs[_currentIndex],
-                    )
-                  : _currentIndex == 3
-                      ? BlocProvider<FilmBloc>(
-                          create: (_) => FilmBloc(apiManager),
-                          child: _tabs[_currentIndex],
-                        )
-                      : _tabs[_currentIndex],
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        child: SizedBox(
-          height: 80,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: _onItemTapped,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: AppColors.bottomBarBackground,
-              selectedItemColor: AppColors.bottomBarTextSelected,
-              unselectedItemColor: AppColors.bottomBarTextUnselected,
-              showUnselectedLabels: true,
-              items: [
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/icons/navbar_home.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
+                : null,
+            body: IndexedStack(
+              index: state.currentIndex,
+              children: _tabs,
+            ),
+            bottomNavigationBar: BlocBuilder<TabBloc, TabState>(
+              builder: (context, state) {
+                return ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                    child: SizedBox(
+                      height: 80,
+                      child: BottomNavigationBar(
+                        currentIndex: state.currentIndex,
+                        onTap: (index) {
+                          BlocProvider.of<TabBloc>(context).add(SelectTabEvent(index));
+                        },
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: AppColors.bottomBarBackground,
+                        selectedItemColor: AppColors.bottomBarTextSelected,
+                        unselectedItemColor: AppColors.bottomBarTextUnselected,
+                        showUnselectedLabels: true,
+                        items: [
+                          BottomNavigationBarItem(
+                          icon: SvgPicture.asset(
+                          'assets/icons/navbar_home.svg',
+                          height: 24,
+                          width: 24,
+                          colorFilter: const ColorFilter.mode(
                           AppColors.bottomBarTextUnselected, BlendMode.srcIn),
-                    ),
-                    activeIcon: SvgPicture.asset(
-                      'assets/icons/navbar_home.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
+                          ),
+                          activeIcon: SvgPicture.asset(
+                          'assets/icons/navbar_home.svg',
+                          height: 24,
+                          width: 24,
+                          colorFilter: const ColorFilter.mode(
                           AppColors.bottomBarTextSelected, BlendMode.srcIn),
+                          ),
+                          label: "Accueil",
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                            'assets/icons/navbar_comics.svg',
+                            height: 24,
+                            width: 24,
+                            colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextUnselected, BlendMode.srcIn),
+                            ),
+                            activeIcon: SvgPicture.asset(
+                              'assets/icons/navbar_comics.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextSelected, BlendMode.srcIn),
+                            ),
+                            label: "Comics",
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              'assets/icons/navbar_series.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextUnselected, BlendMode.srcIn),
+                            ),
+                            activeIcon: SvgPicture.asset(
+                              'assets/icons/navbar_series.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextSelected, BlendMode.srcIn),
+                            ),
+                            label: "Séries",
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              'assets/icons/navbar_movies.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextUnselected, BlendMode.srcIn),
+                            ),
+                            activeIcon: SvgPicture.asset(
+                              'assets/icons/navbar_movies.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextSelected, BlendMode.srcIn),
+                            ),
+                            label: "Films",
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              'assets/icons/navbar_search.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextUnselected, BlendMode.srcIn),
+                            ),
+                            activeIcon: SvgPicture.asset(
+                              'assets/icons/navbar_search.svg',
+                              height: 24,
+                              width: 24,
+                              colorFilter: const ColorFilter.mode(
+                              AppColors.bottomBarTextSelected, BlendMode.srcIn),
+                            ),
+                            label: "Recherche",
+                          ),
+                         ],
+                      ),
                     ),
-                    label: "Accueil"),
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/icons/navbar_comics.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextUnselected, BlendMode.srcIn),
-                    ),
-                    activeIcon: SvgPicture.asset(
-                      'assets/icons/navbar_comics.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ),
-                    label: "Comics"),
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/icons/navbar_series.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextUnselected, BlendMode.srcIn),
-                    ),
-                    activeIcon: SvgPicture.asset(
-                      'assets/icons/navbar_series.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ),
-                    label: "Séries"),
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/icons/navbar_movies.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextUnselected, BlendMode.srcIn),
-                    ),
-                    activeIcon: SvgPicture.asset(
-                      'assets/icons/navbar_movies.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ),
-                    label: "Films"),
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/icons/navbar_search.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextUnselected, BlendMode.srcIn),
-                    ),
-                    activeIcon: SvgPicture.asset(
-                      'assets/icons/navbar_search.svg',
-                      height: 24,
-                      width: 24,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.bottomBarTextSelected, BlendMode.srcIn),
-                    ),
-                    label: "Recherche"),
-              ]),
-        ),
+                );
+            },
+          ),
+          );
+        },
       ),
     );
   }
