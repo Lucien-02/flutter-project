@@ -81,12 +81,15 @@ class HomeTab extends StatelessWidget {
             return {
               'imageUrl': serie.image?.smallUrl ?? '',
               'title': serie.name ?? 'Unknown Title',
-              'subtitle': serie.deck ?? 'No Description',
+              'subtitle': serie.deck ?? '',
+              'detail_route_name': '/serie-detail',
+              'url' : serie.apiDetailUrl ?? '',
             };
           }).toList();
           return HorizontalItemList(
             title: 'Séries populaires',
             items: items,
+            btnVoirPlus: true,
             onVoirPlus: () {
               GoRouter.of(context).push('/series');
             },
@@ -112,6 +115,7 @@ class HomeTab extends StatelessWidget {
           return HorizontalItemList(
             title: 'Comics populaires',
             items: items,
+            btnVoirPlus: true,
             onVoirPlus: () {
               Navigator.push(
                 context,
@@ -142,6 +146,7 @@ class HomeTab extends StatelessWidget {
           return HorizontalItemList(
             title: 'Films populaires',
             items: items,
+            btnVoirPlus: true,
             onVoirPlus: () {
               Navigator.push(
                 context,
@@ -171,6 +176,7 @@ class HomeTab extends StatelessWidget {
           return HorizontalItemList(
             title: 'Personnages',
             items: items,
+            btnVoirPlus: false,
             onVoirPlus: () {
               Navigator.push(
                 context,
