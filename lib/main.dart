@@ -1,6 +1,7 @@
 import 'package:comics_app/screen/demo_request_screen.dart';
 import 'package:comics_app/screen/detail_comic_screen.dart';
 import 'package:comics_app/screen/detail_film_screen.dart';
+import 'package:comics_app/screen/series_tab.dart';
 import 'package:comics_app/screen/detail_personnage_screen.dart';
 import 'package:comics_app/screen/detail_serie_screen.dart';
 import 'package:comics_app/screen/home_screen.dart';
@@ -69,6 +70,13 @@ class MyApp extends StatelessWidget {
       path: '/',
       builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
       routes: [
+        GoRoute(
+            path: '/series',
+            builder: (BuildContext context, GoRouterState state) {
+              return SeriesTab();
+            }
+
+        ),
         GoRoute(
             path: '/serie-detail',
             builder: (BuildContext context, GoRouterState state) {

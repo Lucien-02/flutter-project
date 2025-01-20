@@ -165,6 +165,19 @@ class ApiManager {
     return ComicResponseAPI.fromJson(response.data);
   }
 
+  Future<PersonListResponse> loadPersonListFromAPI({
+    String? fieldList,
+    int? limit,
+    int? offset
+  }) async {
+    return api.loadPersons(
+      apiKey: apiKey,
+      format: format,
+      fieldList: fieldList,
+      limit: limit,
+      offset: offset,);
+  }
+
   Future<PersonResponseAPI> loadPersonWithCustomUrl({
     required String baseUrl,
     String? fieldList,
