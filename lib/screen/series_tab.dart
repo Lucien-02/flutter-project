@@ -48,6 +48,7 @@ class _SeriesTabState extends State<SeriesTab> {
         backgroundColor: AppColors.backgroundScreen,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          leading: null,
           title: Text(
             'Séries les plus populaires',
             style: textTheme.displayLarge,

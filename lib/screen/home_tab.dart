@@ -1,4 +1,5 @@
 
+import 'package:comics_app/bloc/tab_bloc.dart';
 import 'package:comics_app/component/horizontal_item_list_widget.dart';
 import 'package:comics_app/component/item_widget.dart';
 import 'package:comics_app/screen/series_tab.dart';
@@ -84,6 +85,8 @@ class HomeTab extends StatelessWidget {
               'subtitle': serie.deck ?? '',
               'detail_route_name': '/serie-detail',
               'url' : serie.apiDetailUrl ?? '',
+              'id' : '$serie.id'
+              ,
             };
           }).toList();
           return HorizontalItemList(
@@ -91,7 +94,8 @@ class HomeTab extends StatelessWidget {
             items: items,
             btnVoirPlus: true,
             onVoirPlus: () {
-              GoRouter.of(context).push('/series');
+              BlocProvider.of<TabBloc>(context).add(SelectTabEvent(2));
+              //context.go('/series');
             },
           );
         }
@@ -117,12 +121,7 @@ class HomeTab extends StatelessWidget {
             items: items,
             btnVoirPlus: true,
             onVoirPlus: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeriesTab(),
-                ),
-              );
+              BlocProvider.of<TabBloc>(context).add(SelectTabEvent(1));
             },
           );
         }
@@ -148,12 +147,7 @@ class HomeTab extends StatelessWidget {
             items: items,
             btnVoirPlus: true,
             onVoirPlus: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeriesTab(),
-                ),
-              );
+              BlocProvider.of<TabBloc>(context).add(SelectTabEvent(3));
             },
           );
         }
