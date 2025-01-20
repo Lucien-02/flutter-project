@@ -63,7 +63,7 @@ class PersonWidget extends StatelessWidget {
                   builder: (context, PersonState state) {
                     if (state is PersonLoadingState) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (state is PersonLoadedState) {
+                    } else if (state is OnePersonLoadedState) {
                       final person = state.person;
 
                       if (person != null) {

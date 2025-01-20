@@ -9,71 +9,96 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 180,
-      height: 242,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: AppColors.cardElementBackground,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-            child: Image.network(
-              imageUrl,
-              width: 180,
-              height: 177,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 180,
-                  height: 177,
-                  color: Colors.grey.shade300,
-                  child: const Icon(Icons.broken_image, color: Colors.grey),
-                );
-              },
+    return InkWell(
+      /*onTap: () {
+        Widget targetScreen;
+        String route_name;
+        Object params;
+        switch (type) {
+          case 'serie':
+            route_name = '/serie-detail';
+            params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+            break;
+          case 'comic':
+            route_name = '/comic-detail';
+            params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+            break;
+          case 'film':
+            route_name = '/film-detail';
+            params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+            break;
+          default:
+            route_name = '/serie-detail';
+            params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+        }
+        GoRouter.of(context).push(route_name,extra: params);
+      },*/
+      child: Container(
+            width: 180,
+            height: 242,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: AppColors.cardElementBackground,
             ),
-          ),
-          // Title and Subtitle
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                // Image
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                  child: Image.network(
+                    imageUrl,
+                    width: 180,
+                    height: 177,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 180,
+                        height: 177,
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.broken_image, color: Colors.grey),
+                      );
+                    },
                   ),
                 ),
-                // Subtitle (affiché uniquement si présent)
-                if (subtitle != null) ...[
-                  const SizedBox(height: 4),
-                  SizedBox(
-                    width: 180,
-                    child: Text(
-                    subtitle!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),)
-                  
-                ],
+                // Title and Subtitle
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // Subtitle (affiché uniquement si présent)
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          width: 180,
+                          child: Text(
+                          subtitle!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),)
+
+                      ],
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ],
-      ),
     );
   }
 }

@@ -2,121 +2,94 @@
 import 'package:comics_app/component/horizontal_item_list_widget.dart';
 import 'package:comics_app/component/item_widget.dart';
 import 'package:comics_app/screen/series_tab.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:comics_app/bloc/serie_bloc.dart';
+import 'package:comics_app/bloc/comic_bloc.dart';
+import 'package:comics_app/bloc/film_bloc.dart';
+import 'package:comics_app/bloc/person_bloc.dart';
+import 'package:comics_app/manager/api_manager.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeTab extends StatelessWidget {
   //final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> items = [
-      {
-        'imageUrl': '',
-        'title': 'Série 1',
-        'subtitle': 'Description 1',
-      },
-      {
-        'imageUrl': '',
-        'title': 'Série 2',
-        'subtitle': 'Description 2',
-      },
-      {
-        'imageUrl': '',
-        'title': 'Série 3',
-        'subtitle': 'Description 3',
-      },
-      {
-        'imageUrl': '',
-        'title': 'Série 4',
-        'subtitle': 'Description 4',
-      },
-      {
-        'imageUrl': '',
-        'title': 'Série 5',
-        'subtitle': 'Description 5',
-      },
-    ];
-    return SingleChildScrollView(
-  child: Column(
-    spacing: 15,
-    children: [
-      HorizontalItemList(
-        title: 'Séries populaires',
-        items: items,
-        onVoirPlus: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SeriesTab(),
-            ),
-          );
-        },
-      ),
-      HorizontalItemList(
-        title: 'Comics populaires',
-        items: items,
-        onVoirPlus: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SeriesTab(),
-            ),
-          );
-        },
-      ),
-      HorizontalItemList(
-        title: 'Films populaires',
-        items: items,
-        onVoirPlus: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SeriesTab(),
-            ),
-          );
-        },
-      ),
-    ],
-  ),
-);
-  }
-
-/*@override
-  Widget build(BuildContext context) {
+    final apiManager = ApiManager();
     return MultiBlocProvider(
       providers: [
-       BlocProvider(create: (_) => SeriesCubit(apiService)..fetchSeries()),
-        BlocProvider(create: (_) => ComicsCubit(apiService)..fetchComics()),
-      ],
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SectionTitle(title: 'Séries populaires'),
-            _buildSeriesSection(context),
-            SectionTitle(title: 'Comics populaires'),
-            _buildComicsSection(context),
-          ],
+        BlocProvider(create: (_) => SerieBloc(apiManager)
+          ..add(
+            LoadSerieListEvent(
+              fieldList: 'id,image,name,description,api_detail_url',
+                limit:5,
+            )
+          )
         ),
+        BlocProvider(create: (_) => ComicBloc(apiManager)
+          ..add(
+              LoadComicListEvent(
+                fieldList: 'id,image,name,api_detail_url,description',
+                  limit:5,
+              )
+          ),
+        ),
+        BlocProvider(create: (_) => FilmBloc(apiManager)
+          ..add(
+              LoadFilmListEvent(
+                fieldList: 'id,image,name,api_detail_url,description',
+                limit:5,
+              )
+          ),
+        ),
+        BlocProvider(create: (_) => PersonBloc(apiManager)
+          ..add(
+              LoadPersonListEvent(
+                fieldList: 'id,image,name,api_detail_url',
+                limit:5,
+              )
+          ),
+        )
+      ],
+      child:SingleChildScrollView(
+        child: Column(
+        //spacing: 15,
+        children: [
+          _buildSeriesSection(context),
+          SizedBox(height: 15),
+          _buildComicsSection(context),
+          SizedBox(height: 15),
+          _buildFilmsSection(context),
+          SizedBox(height: 15),
+          _buildPersonsSection(context),
+        ],
+      ),
       ),
     );
   }
 
+
+
   Widget _buildSeriesSection(BuildContext context) {
-    return BlocBuilder<SeriesCubit, SeriesState>(
-      builder: (context, state) {
-        if (state is SeriesLoading) return Center(child: CircularProgressIndicator());
-        if (state is SeriesLoaded) {
-          return SizedBox(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: state.series.length,
-              itemBuilder: (context, index) {
-                final series = state.series[index];
-                return CardItem(title: series.title, imageUrl: series.imageUrl);
-              },
-            ),
+    return BlocBuilder<SerieBloc, SerieState>(
+      builder: (context, SerieState state) {
+        if (state is SerieLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is SerieLoadedState) {
+          final List<Map<String, String>> items = state.series.map((serie) {
+            return {
+              'imageUrl': serie.image?.smallUrl ?? '',
+              'title': serie.name ?? 'Unknown Title',
+              'subtitle': serie.deck ?? 'No Description',
+            };
+          }).toList();
+          return HorizontalItemList(
+            title: 'Séries populaires',
+            items: items,
+            onVoirPlus: () {
+              GoRouter.of(context).push('/series');
+            },
           );
         }
         return Center(child: Text('Erreur lors du chargement des séries.'));
@@ -125,24 +98,91 @@ class HomeTab extends StatelessWidget {
   }
 
   Widget _buildComicsSection(BuildContext context) {
-    return BlocBuilder<ComicsCubit, ComicsState>(
-      builder: (context, state) {
-        if (state is ComicsLoading) return Center(child: CircularProgressIndicator());
-        if (state is ComicsLoaded) {
-          return SizedBox(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: state.comics.length,
-              itemBuilder: (context, index) {
-                final comic = state.comics[index];
-                return CardItem(title: comic.title, imageUrl: comic.imageUrl);
-              },
-            ),
+    return BlocBuilder<ComicBloc, ComicState>(
+      builder: (context, ComicState state) {
+        if (state is ComicLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is ComicLoadedState) {
+          final List<Map<String, String>> items = state.comics.map((comic) {
+            return {
+              'imageUrl': comic.image?.smallUrl ?? '',
+              'title': comic.name ?? 'Unknown Title',
+              'subtitle': comic.deck ?? 'No Description',
+            };
+          }).toList();
+          return HorizontalItemList(
+            title: 'Comics populaires',
+            items: items,
+            onVoirPlus: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SeriesTab(),
+                ),
+              );
+            },
           );
         }
         return Center(child: Text('Erreur lors du chargement des comics.'));
       },
     );
-  }*/
+  }
+
+  Widget _buildFilmsSection(BuildContext context) {
+    return BlocBuilder<FilmBloc, FilmState>(
+      builder: (context, FilmState state) {
+        if (state is FilmLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is FilmLoadedState) {
+          final List<Map<String, String>> items = state.films.map((film) {
+            return {
+              'imageUrl': film.image?.smallUrl ?? '',
+              'title': film.name ?? 'Unknown Title',
+              'subtitle': film.deck ?? 'No Description',
+            };
+          }).toList();
+          return HorizontalItemList(
+            title: 'Films populaires',
+            items: items,
+            onVoirPlus: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SeriesTab(),
+                ),
+              );
+            },
+          );
+        }
+        return Center(child: Text('Erreur lors du chargement des films.'));
+      },
+    );
+  }
+  Widget _buildPersonsSection(BuildContext context) {
+    return BlocBuilder<PersonBloc, PersonState>(
+      builder: (context, PersonState state) {
+        if (state is PersonLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is PersonLoadedState) {
+          final List<Map<String, String>> items = state.persons.map((person) {
+            return {
+              'imageUrl': person.image?.smallUrl ?? '',
+              'title': person.name ?? 'Unknown Title',
+              'subtitle': 'No Description',
+            };
+          }).toList();
+          return HorizontalItemList(
+            title: 'Personnages',
+            items: items,
+            onVoirPlus: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SeriesTab(),
+                ),
+              );
+            },
+          );
+        }
+        return Center(child: Text('Erreur lors du chargement des personnages.'));
+      },
+    );
+  }
 }

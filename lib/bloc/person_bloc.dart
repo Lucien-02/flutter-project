@@ -12,13 +12,22 @@ class LoadPersonEvent extends PersonEvent {
   final int? limit;
 
   LoadPersonEvent({required this.baseUrl,this.fieldList, this.limit});
+}
+
+class LoadPersonListEvent extends PersonEvent {
+  final String? fieldList;
+  final int? limit;
+
+  LoadPersonListEvent({this.fieldList, this.limit});
 
 }
 
 
 
-class PersonBloc extends Bloc<LoadPersonEvent, PersonState> {
+class PersonBloc extends Bloc<PersonEvent, PersonState> {
   final ApiManager _apiManager;
+  List<PersonResponse> persons = [];
+  int offset = 0;
 
   PersonBloc(this._apiManager) : super(PersonInitialState()) {
 
@@ -32,7 +41,7 @@ class PersonBloc extends Bloc<LoadPersonEvent, PersonState> {
           limit: event.limit,
         );
 
-        emit(PersonLoadedState(person: person.results));
+        emit(OnePersonLoadedState(person: person.results));
       } catch (error) {
         AppError appError;
 
@@ -48,6 +57,34 @@ class PersonBloc extends Bloc<LoadPersonEvent, PersonState> {
       }
     });
 
+    on<LoadPersonListEvent>((event, emit) async {
+      try {
+        emit(PersonLoadingState());
+        offset = 0;
+
+        final Listpersons = await _apiManager.loadPersonListFromAPI(
+          fieldList: event.fieldList,
+          limit: event.limit,
+        );
+        persons = Listpersons.results;
+        emit(PersonLoadedState(persons: persons));
+        offset += Listpersons.results.length;
+
+
+      } catch (error) {
+        AppError appError;
+
+        if (error is DioException) {
+          appError = AppError.fromDioError(error);
+        } else if (error is FormatException) {
+          appError = AppError.formatException();
+        } else {
+          appError = AppError.generic("Une erreur inconnue est survenue.");
+        }
+
+        emit(PersonErrorState(message: appError.message, code: appError.code));
+      }
+    });
   }
 }
 
@@ -58,9 +95,14 @@ class PersonInitialState extends PersonState {}
 
 class PersonLoadingState extends PersonState {}
 
-class PersonLoadedState extends PersonState {
+class OnePersonLoadedState extends PersonState {
   final PersonResponse person;
-  PersonLoadedState({required this.person});
+  OnePersonLoadedState({required this.person});
+}
+
+class PersonLoadedState extends PersonState {
+  final List<PersonResponse> persons;
+  PersonLoadedState({required this.persons});
 }
 
 class PersonErrorState  extends PersonState {
