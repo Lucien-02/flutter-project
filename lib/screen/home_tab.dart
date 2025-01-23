@@ -29,7 +29,9 @@ class HomeTab extends StatelessWidget {
         BlocProvider(
           create: (_) => ComicBloc(apiManager)
             ..add(LoadComicListEvent(
-              fieldList: 'id,image,name,api_detail_url,description',
+
+              fieldList: 'id,image,name,api_detail_url,description,volume,issue_number',
+
               limit: 5,
             )),
         ),
@@ -106,8 +108,9 @@ class HomeTab extends StatelessWidget {
           final List<Map<String, String>> items = state.comics.map((comic) {
             return {
               'imageUrl': comic.image?.smallUrl ?? '',
-              'title': comic.name ?? 'Unknown Title',
-              'subtitle': comic.deck ?? 'No Description',
+
+              'title': comic.formattedName,
+
               'detail_route_name': '/comic-detail',
               'url': comic.apiDetailUrl ?? '',
               'id': '$comic.id',
@@ -138,7 +141,6 @@ class HomeTab extends StatelessWidget {
             return {
               'imageUrl': film.image?.smallUrl ?? '',
               'title': film.name ?? 'Unknown Title',
-              'subtitle': film.deck ?? 'No Description',
               'detail_route_name': '/film-detail',
               'url': film.apiDetailUrl ?? '',
               'id': '$film.id',
@@ -169,22 +171,14 @@ class HomeTab extends StatelessWidget {
             return {
               'imageUrl': person.image?.smallUrl ?? '',
               'title': person.name ?? 'Unknown Title',
-              'subtitle': 'No Description',
+              'url': person.apiDetailUrl ?? '',
             };
           }).toList();
           return HorizontalItemList(
             title: 'Personnages',
             items: items,
             btnVoirPlus: false,
-            type: 'film',
-            onVoirPlus: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeriesTab(),
-                ),
-              );
-            },
+            type: 'personnage',
           );
         }
         return Center(

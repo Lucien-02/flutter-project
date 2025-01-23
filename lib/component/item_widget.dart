@@ -53,6 +53,14 @@ class ItemWidget extends StatelessWidget {
               "id": id
             };
             break;
+          case 'personnage':
+            route_name = '/personnage-detail';
+            params = {
+              "title": title,
+              "imageUrl": imageUrl,
+              "url": url
+            };
+            break;
           default:
             route_name = '/serie-detail';
             params = {
@@ -77,6 +85,7 @@ class ItemWidget extends StatelessWidget {
             // Image
             ClipRRect(
               borderRadius:
+
                   const BorderRadius.vertical(top: Radius.circular(8)),
               child: Image.network(
                 imageUrl,

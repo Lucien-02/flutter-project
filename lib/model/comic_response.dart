@@ -21,6 +21,7 @@ class ComicResponse {
   final String? name;
   final String? storeDate;
   final String? siteDetailUrl;
+  final Volume? volume;
 
   ComicResponse({
     required this.aliases,
@@ -39,6 +40,7 @@ class ComicResponse {
     required this.name,
     required this.storeDate,
     required this.siteDetailUrl,
+    required this.volume
   });
 
   factory ComicResponse.fromJson(Map<String, dynamic> json) {
@@ -59,10 +61,40 @@ class ComicResponse {
       name: json['name'],
       storeDate: json['store_date'],
       siteDetailUrl: json['site_detail_url'],
+      volume: json['volume'] != null
+          ? Volume.fromJson(json['volume'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() => _$ComicResponseToJson(this);
+
+  String get formattedName {
+    // Check if volume, issueNumber, and name are non-null before concatenating
+    String volumeName = volume?.name ?? '';
+    String issueNum = issueNumber ?? '';
+    String comicName = name ?? '';
+
+    return '$volumeName $issueNum $comicName';
+  }
+}
+
+@JsonSerializable()
+class Volume {
+  final String? apiDetailUrl;
+  final int? id;
+  final String? name;
+
+  Volume({
+    required this.apiDetailUrl,
+    required this.id,
+    required this.name,
+  });
+
+  factory Volume.fromJson(Map<String, dynamic> json) =>
+      _$VolumeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VolumeToJson(this);
 }
 
 

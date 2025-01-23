@@ -26,6 +26,9 @@ ComicResponse _$ComicResponseFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       storeDate: json['storeDate'] as String?,
       siteDetailUrl: json['siteDetailUrl'] as String?,
+      volume: json['volume'] == null
+          ? null
+          : Volume.fromJson(json['volume'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ComicResponseToJson(ComicResponse instance) =>
@@ -46,6 +49,19 @@ Map<String, dynamic> _$ComicResponseToJson(ComicResponse instance) =>
       'name': instance.name,
       'storeDate': instance.storeDate,
       'siteDetailUrl': instance.siteDetailUrl,
+      'volume': instance.volume,
+    };
+
+Volume _$VolumeFromJson(Map<String, dynamic> json) => Volume(
+      apiDetailUrl: json['apiDetailUrl'] as String?,
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+    );
+
+Map<String, dynamic> _$VolumeToJson(Volume instance) => <String, dynamic>{
+      'apiDetailUrl': instance.apiDetailUrl,
+      'id': instance.id,
+      'name': instance.name,
     };
 
 ComicListResponse _$ComicListResponseFromJson(Map<String, dynamic> json) =>
