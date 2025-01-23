@@ -11,12 +11,12 @@ class ItemWidget extends StatelessWidget {
   final int id;
   const ItemWidget(
       {super.key,
-        required this.imageUrl,
-        required this.title,
-        this.subtitle,
-        required this.id,
-        required this.type,
-        required this.url});
+      required this.imageUrl,
+      required this.title,
+      this.subtitle,
+      required this.id,
+      required this.type,
+      required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +52,7 @@ class ItemWidget extends StatelessWidget {
               "url": url,
               "id": id
             };
+            break;
           case 'personnage':
             route_name = '/personnage-detail';
             params = {
@@ -84,7 +85,8 @@ class ItemWidget extends StatelessWidget {
             // Image
             ClipRRect(
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(8)),
+
+                  const BorderRadius.vertical(top: Radius.circular(8)),
               child: Image.network(
                 imageUrl,
                 width: 180,

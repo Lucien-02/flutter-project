@@ -29,7 +29,9 @@ class HomeTab extends StatelessWidget {
         BlocProvider(
           create: (_) => ComicBloc(apiManager)
             ..add(LoadComicListEvent(
+
               fieldList: 'id,image,name,api_detail_url,description,volume,issue_number',
+
               limit: 5,
             )),
         ),
@@ -106,7 +108,9 @@ class HomeTab extends StatelessWidget {
           final List<Map<String, String>> items = state.comics.map((comic) {
             return {
               'imageUrl': comic.image?.smallUrl ?? '',
+
               'title': comic.formattedName,
+
               'detail_route_name': '/comic-detail',
               'url': comic.apiDetailUrl ?? '',
               'id': '$comic.id',
@@ -175,7 +179,6 @@ class HomeTab extends StatelessWidget {
             items: items,
             btnVoirPlus: false,
             type: 'personnage',
-
           );
         }
         return Center(

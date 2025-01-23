@@ -11,11 +11,11 @@ class HorizontalItemList extends StatelessWidget {
 
   const HorizontalItemList(
       {super.key,
-        required this.title,
-        required this.items,
-        this.onVoirPlus,
-        required this.btnVoirPlus,
-        required this.type});
+      required this.title,
+      required this.items,
+      this.onVoirPlus,
+      required this.btnVoirPlus,
+      required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -53,24 +53,25 @@ class HorizontalItemList extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
+
                     ),
                   ],
                 ),
                 btnVoirPlus
                     ? TextButton(
-                  style: TextButton.styleFrom(
-                    fixedSize: const Size(92, 32),
-                    backgroundColor: AppColors.backgroundScreen,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: onVoirPlus,
-                  child: const Text(
-                    'Voir plus',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                )
+                        style: TextButton.styleFrom(
+                          fixedSize: const Size(92, 32),
+                          backgroundColor: AppColors.backgroundScreen,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: onVoirPlus,
+                        child: const Text(
+                          'Voir plus',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
+                      )
                     : Container()
               ],
             ),
