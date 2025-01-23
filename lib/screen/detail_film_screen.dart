@@ -44,18 +44,30 @@ class _DetailFilmScreenState extends State<DetailFilmScreen> {
   }
 
   String formatMoney(String amount) {
-    print(amount);
-    if(amount.isEmpty) {
+    if (amount.isEmpty) {
       return "Pas de montant existant";
     }
-    int number = int.parse(amount);
+
+    String cleanAmount = amount.replaceAll(RegExp(r'[\$\s]'), '');
+    if (amount.contains('million')) {
+      cleanAmount = cleanAmount.replaceAll('million', '').trim();
+      double number = double.parse(cleanAmount);
+      double millions = number;
+
+      return '${millions.toStringAsFixed(0)} millions \$';
+    }
+
+    int number = int.parse(cleanAmount);
 
     if (number >= 1000000) {
       double millions = number / 1000000;
       return '${millions.toStringAsFixed(0)} millions \$';
     }
+
     return '\$${number.toString()}';
   }
+
+
 
   String formatList(List<dynamic>? list) {
     if (list == null || list.isEmpty) {

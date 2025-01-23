@@ -1,4 +1,3 @@
-
 import 'package:comics_app/bloc/tab_bloc.dart';
 import 'package:comics_app/component/horizontal_item_list_widget.dart';
 import 'package:comics_app/component/item_widget.dart';
@@ -21,62 +20,56 @@ class HomeTab extends StatelessWidget {
     final apiManager = ApiManager();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => SerieBloc(apiManager)
-          ..add(
-            LoadSerieListEvent(
-              fieldList: 'id,image,name,description,api_detail_url',
-                limit:5,
-            )
-          )
+        BlocProvider(
+            create: (_) => SerieBloc(apiManager)
+              ..add(LoadSerieListEvent(
+                fieldList: 'id,image,name,description,api_detail_url',
+                limit: 5,
+              ))),
+        BlocProvider(
+          create: (_) => ComicBloc(apiManager)
+            ..add(LoadComicListEvent(
+              fieldList: 'id,image,name,api_detail_url,description,volume,issue_number',
+              limit: 5,
+            )),
         ),
-        BlocProvider(create: (_) => ComicBloc(apiManager)
-          ..add(
-              LoadComicListEvent(
-                fieldList: 'id,image,name,api_detail_url,description',
-                  limit:5,
-              )
-          ),
+        BlocProvider(
+          create: (_) => FilmBloc(apiManager)
+            ..add(LoadFilmListEvent(
+              fieldList: 'id,image,name,api_detail_url,description',
+              limit: 5,
+            )),
         ),
-        BlocProvider(create: (_) => FilmBloc(apiManager)
-          ..add(
-              LoadFilmListEvent(
-                fieldList: 'id,image,name,api_detail_url,description',
-                limit:5,
-              )
-          ),
-        ),
-        BlocProvider(create: (_) => PersonBloc(apiManager)
-          ..add(
-              LoadPersonListEvent(
-                fieldList: 'id,image,name,api_detail_url',
-                limit:5,
-              )
-          ),
+        BlocProvider(
+          create: (_) => PersonBloc(apiManager)
+            ..add(LoadPersonListEvent(
+              fieldList: 'id,image,name,api_detail_url',
+              limit: 5,
+            )),
         )
       ],
-      child:SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Column(
-        //spacing: 15,
-        children: [
-          _buildSeriesSection(context),
-          SizedBox(height: 15),
-          _buildComicsSection(context),
-          SizedBox(height: 15),
-          _buildFilmsSection(context),
-          SizedBox(height: 15),
-          _buildPersonsSection(context),
-        ],
-      ),
+          //spacing: 15,
+          children: [
+            _buildSeriesSection(context),
+            SizedBox(height: 15),
+            _buildComicsSection(context),
+            SizedBox(height: 15),
+            _buildFilmsSection(context),
+            SizedBox(height: 15),
+            _buildPersonsSection(context),
+          ],
+        ),
       ),
     );
   }
 
-
-
   Widget _buildSeriesSection(BuildContext context) {
     return BlocBuilder<SerieBloc, SerieState>(
       builder: (context, SerieState state) {
-        if (state is SerieLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is SerieLoadingState)
+          return Center(child: CircularProgressIndicator());
         if (state is SerieLoadedState) {
           final List<Map<String, String>> items = state.series.map((serie) {
             return {
@@ -84,15 +77,15 @@ class HomeTab extends StatelessWidget {
               'title': serie.name ?? 'Unknown Title',
               'subtitle': serie.deck ?? '',
               'detail_route_name': '/serie-detail',
-              'url' : serie.apiDetailUrl ?? '',
-              'id' : '$serie.id'
-              ,
+              'url': serie.apiDetailUrl ?? '',
+              'id': '$serie.id',
             };
           }).toList();
           return HorizontalItemList(
             title: 'Séries populaires',
             items: items,
             btnVoirPlus: true,
+            type: 'serie',
             onVoirPlus: () {
               BlocProvider.of<TabBloc>(context).add(SelectTabEvent(2));
               //context.go('/series');
@@ -107,19 +100,23 @@ class HomeTab extends StatelessWidget {
   Widget _buildComicsSection(BuildContext context) {
     return BlocBuilder<ComicBloc, ComicState>(
       builder: (context, ComicState state) {
-        if (state is ComicLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is ComicLoadingState)
+          return Center(child: CircularProgressIndicator());
         if (state is ComicLoadedState) {
           final List<Map<String, String>> items = state.comics.map((comic) {
             return {
               'imageUrl': comic.image?.smallUrl ?? '',
-              'title': comic.name ?? 'Unknown Title',
-              'subtitle': comic.deck ?? 'No Description',
+              'title': comic.formattedName,
+              'detail_route_name': '/comic-detail',
+              'url': comic.apiDetailUrl ?? '',
+              'id': '$comic.id',
             };
           }).toList();
           return HorizontalItemList(
             title: 'Comics populaires',
             items: items,
             btnVoirPlus: true,
+            type: 'comic',
             onVoirPlus: () {
               BlocProvider.of<TabBloc>(context).add(SelectTabEvent(1));
             },
@@ -133,19 +130,23 @@ class HomeTab extends StatelessWidget {
   Widget _buildFilmsSection(BuildContext context) {
     return BlocBuilder<FilmBloc, FilmState>(
       builder: (context, FilmState state) {
-        if (state is FilmLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is FilmLoadingState)
+          return Center(child: CircularProgressIndicator());
         if (state is FilmLoadedState) {
           final List<Map<String, String>> items = state.films.map((film) {
             return {
               'imageUrl': film.image?.smallUrl ?? '',
               'title': film.name ?? 'Unknown Title',
-              'subtitle': film.deck ?? 'No Description',
+              'detail_route_name': '/film-detail',
+              'url': film.apiDetailUrl ?? '',
+              'id': '$film.id',
             };
           }).toList();
           return HorizontalItemList(
             title: 'Films populaires',
             items: items,
             btnVoirPlus: true,
+            type: 'film',
             onVoirPlus: () {
               BlocProvider.of<TabBloc>(context).add(SelectTabEvent(3));
             },
@@ -155,33 +156,30 @@ class HomeTab extends StatelessWidget {
       },
     );
   }
+
   Widget _buildPersonsSection(BuildContext context) {
     return BlocBuilder<PersonBloc, PersonState>(
       builder: (context, PersonState state) {
-        if (state is PersonLoadingState) return Center(child: CircularProgressIndicator());
+        if (state is PersonLoadingState)
+          return Center(child: CircularProgressIndicator());
         if (state is PersonLoadedState) {
           final List<Map<String, String>> items = state.persons.map((person) {
             return {
               'imageUrl': person.image?.smallUrl ?? '',
               'title': person.name ?? 'Unknown Title',
-              'subtitle': 'No Description',
+              'url': person.apiDetailUrl ?? '',
             };
           }).toList();
           return HorizontalItemList(
             title: 'Personnages',
             items: items,
             btnVoirPlus: false,
-            onVoirPlus: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeriesTab(),
-                ),
-              );
-            },
+            type: 'personnage',
+
           );
         }
-        return Center(child: Text('Erreur lors du chargement des personnages.'));
+        return Center(
+            child: Text('Erreur lors du chargement des personnages.'));
       },
     );
   }
