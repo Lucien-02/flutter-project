@@ -26,12 +26,17 @@ class IconTextRow extends StatelessWidget {
             color: iconColor ?? Colors.white,
           ),
           const SizedBox(width: 8.0),
-          Text(
-            text,
-            style: textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+          SizedBox(
+            width: 162,
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
