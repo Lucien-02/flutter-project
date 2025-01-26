@@ -2,6 +2,7 @@ import 'package:comics_app/bloc/tab_bloc.dart';
 import 'package:comics_app/component/horizontal_item_list_widget.dart';
 import 'package:comics_app/component/item_widget.dart';
 import 'package:comics_app/screen/series_tab.dart';
+import 'package:comics_app/theme/app_colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:comics_app/bloc/comic_bloc.dart';
 import 'package:comics_app/bloc/film_bloc.dart';
 import 'package:comics_app/bloc/person_bloc.dart';
 import 'package:comics_app/manager/api_manager.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeTab extends StatelessWidget {
@@ -29,9 +31,8 @@ class HomeTab extends StatelessWidget {
         BlocProvider(
           create: (_) => ComicBloc(apiManager)
             ..add(LoadComicListEvent(
-
-              fieldList: 'id,image,name,api_detail_url,description,volume,issue_number',
-
+              fieldList:
+                  'id,image,name,api_detail_url,description,volume,issue_number',
               limit: 5,
             )),
         ),
@@ -50,19 +51,68 @@ class HomeTab extends StatelessWidget {
             )),
         )
       ],
-      child: SingleChildScrollView(
-        child: Column(
-          //spacing: 15,
-          children: [
-            _buildSeriesSection(context),
-            SizedBox(height: 15),
-            _buildComicsSection(context),
-            SizedBox(height: 15),
-            _buildFilmsSection(context),
-            SizedBox(height: 15),
-            _buildPersonsSection(context),
-          ],
-        ),
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 160.0,
+            pinned: true,
+            backgroundColor: AppColors.backgroundScreen,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Container(
+                      color: AppColors.backgroundScreen,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 32.0, top: 40.0),
+                      child: Text(
+                        'Bienvenue !',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge
+                            ?.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, right: 9.5),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: SizedBox(
+                          width: 122,
+                          height: 160,
+                          child: SvgPicture.asset(
+                            'assets/icons/astronaut.svg',
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                _buildSeriesSection(context),
+                const SizedBox(height: 15),
+                _buildComicsSection(context),
+                const SizedBox(height: 15),
+                _buildFilmsSection(context),
+                const SizedBox(height: 15),
+                _buildPersonsSection(context),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -94,7 +144,8 @@ class HomeTab extends StatelessWidget {
             },
           );
         }
-        return Center(child: Text('Erreur lors du chargement des séries.'));
+        return const Center(
+            child: Text('Erreur lors du chargement des séries.'));
       },
     );
   }
@@ -108,9 +159,7 @@ class HomeTab extends StatelessWidget {
           final List<Map<String, String>> items = state.comics.map((comic) {
             return {
               'imageUrl': comic.image?.smallUrl ?? '',
-
               'title': comic.formattedName,
-
               'detail_route_name': '/comic-detail',
               'url': comic.apiDetailUrl ?? '',
               'id': '$comic.id',
@@ -165,7 +214,7 @@ class HomeTab extends StatelessWidget {
     return BlocBuilder<PersonBloc, PersonState>(
       builder: (context, PersonState state) {
         if (state is PersonLoadingState)
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         if (state is PersonLoadedState) {
           final List<Map<String, String>> items = state.persons.map((person) {
             return {
@@ -181,7 +230,7 @@ class HomeTab extends StatelessWidget {
             type: 'personnage',
           );
         }
-        return Center(
+        return const Center(
             child: Text('Erreur lors du chargement des personnages.'));
       },
     );
