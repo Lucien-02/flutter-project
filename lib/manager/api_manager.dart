@@ -2,6 +2,7 @@ import 'package:comics_app/endpoint/api.dart';
 import 'package:comics_app/model/comic_response.dart';
 import 'package:comics_app/model/film_response.dart';
 import 'package:comics_app/model/person_response.dart';
+import 'package:comics_app/model/search_response.dart';
 import 'package:comics_app/model/series_list_response.dart';
 import 'package:dio/dio.dart';
 
@@ -49,18 +50,33 @@ class ApiManager {
     ));
   }
 
-
-  Future<SeriesListResponse> loadSerieListFromAPI({
-    String? fieldList,
-    int? limit,
-    int? offset
-  }) async {
+  Future<SeriesListResponse> loadSerieListFromAPI(
+      {String? fieldList, int? limit, int? offset}) async {
     return api.loadSeries(
       apiKey: apiKey,
       format: format,
       fieldList: fieldList,
       limit: limit,
-      offset: offset,);
+      offset: offset,
+    );
+  }
+
+  Future<SearchResponse> loadSearchFromAPI({
+    String? query,
+    String? fieldList,
+    int? limit,
+    int? offset,
+    String? resources,
+  }) async {
+    return api.loadSearch(
+      apiKey: apiKey,
+      format: format,
+      query: query,
+      fieldList: fieldList,
+      limit: limit,
+      offset: offset,
+      resources: resources,
+    );
   }
 
   Future<SerieResponseAPI> loadSerieWithCustomUrl({
@@ -68,8 +84,7 @@ class ApiManager {
     String? fieldList,
     int? limit,
   }) async {
-    final dio = Dio()
-      ..options.baseUrl = baseUrl;
+    final dio = Dio()..options.baseUrl = baseUrl;
     print(baseUrl);
 
     final response = await dio.get(
@@ -84,15 +99,13 @@ class ApiManager {
     return SerieResponseAPI.fromJson(response.data);
   }
 
-
   Future<EpisodeResponseAPI> loadEpisodeWithCustomUrl({
     required String baseUrl,
     String? fieldList,
     String? filter,
     int? limit,
   }) async {
-    final dio = Dio()
-      ..options.baseUrl = baseUrl;
+    final dio = Dio()..options.baseUrl = baseUrl;
 
     final response = await dio.get(
       '',
@@ -107,15 +120,13 @@ class ApiManager {
     return EpisodeResponseAPI.fromJson(response.data);
   }
 
-
   Future<CharacterResponseAPI> loadCharacterWithCustomUrl({
     required String baseUrl,
     String? fieldList,
     String? filter,
     int? limit,
   }) async {
-    final dio = Dio()
-      ..options.baseUrl = baseUrl;
+    final dio = Dio()..options.baseUrl = baseUrl;
 
     final response = await dio.get(
       '',
@@ -131,17 +142,15 @@ class ApiManager {
     return CharacterResponseAPI.fromJson(response.data);
   }
 
-  Future<ComicListResponse> loadComicListFromAPI({
-    String? fieldList,
-    int? limit,
-    int? offset
-  }) async {
+  Future<ComicListResponse> loadComicListFromAPI(
+      {String? fieldList, int? limit, int? offset}) async {
     return api.loadComics(
       apiKey: apiKey,
       format: format,
       fieldList: fieldList,
       limit: limit,
-      offset: offset,);
+      offset: offset,
+    );
   }
 
   Future<ComicResponseAPI> loadComicWithCustomUrl({
@@ -149,8 +158,7 @@ class ApiManager {
     String? fieldList,
     int? limit,
   }) async {
-    final dio = Dio()
-      ..options.baseUrl = baseUrl;
+    final dio = Dio()..options.baseUrl = baseUrl;
     print(baseUrl);
 
     final response = await dio.get(
@@ -165,17 +173,15 @@ class ApiManager {
     return ComicResponseAPI.fromJson(response.data);
   }
 
-  Future<PersonListResponse> loadPersonListFromAPI({
-    String? fieldList,
-    int? limit,
-    int? offset
-  }) async {
+  Future<PersonListResponse> loadPersonListFromAPI(
+      {String? fieldList, int? limit, int? offset}) async {
     return api.loadPersons(
       apiKey: apiKey,
       format: format,
       fieldList: fieldList,
       limit: limit,
-      offset: offset,);
+      offset: offset,
+    );
   }
 
   Future<PersonResponseAPI> loadPersonWithCustomUrl({
@@ -184,8 +190,7 @@ class ApiManager {
     String? filter,
     int? limit,
   }) async {
-    final dio = Dio()
-      ..options.baseUrl = baseUrl;
+    final dio = Dio()..options.baseUrl = baseUrl;
 
     final response = await dio.get(
       '',
@@ -200,17 +205,15 @@ class ApiManager {
     return PersonResponseAPI.fromJson(response.data);
   }
 
-  Future<FilmListResponse> loadFilmListFromAPI({
-    String? fieldList,
-    int? limit,
-    int? offset
-  }) async {
+  Future<FilmListResponse> loadFilmListFromAPI(
+      {String? fieldList, int? limit, int? offset}) async {
     return api.loadFilms(
       apiKey: apiKey,
       format: format,
       fieldList: fieldList,
       limit: limit,
-      offset: offset,);
+      offset: offset,
+    );
   }
 
   Future<FilmResponseAPI> loadFilmWithCustomUrl({
@@ -218,8 +221,7 @@ class ApiManager {
     String? fieldList,
     int? limit,
   }) async {
-    final dio = Dio()
-      ..options.baseUrl = baseUrl;
+    final dio = Dio()..options.baseUrl = baseUrl;
 
     final response = await dio.get(
       '',

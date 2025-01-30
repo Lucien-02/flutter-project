@@ -1,6 +1,7 @@
 import 'package:comics_app/model/comic_response.dart';
 import 'package:comics_app/model/film_response.dart';
 import 'package:comics_app/model/person_response.dart';
+import 'package:comics_app/model/search_response.dart';
 import 'package:comics_app/model/series_list_response.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -19,7 +20,6 @@ abstract class Api {
     @Query('limit') int? limit,
     @Query('offset') int? offset,
   });
-
 
   @GET('issues/')
   Future<ComicListResponse> loadComics({
@@ -46,5 +46,16 @@ abstract class Api {
     @Query('field_list') String? fieldList,
     @Query('limit') int? limit,
     @Query('offset') int? offset,
+  });
+
+  @GET('search/')
+  Future<SearchResponse> loadSearch({
+    @Query('api_key') required String apiKey,
+    @Query('format') required String format,
+    @Query('query') String? query,
+    @Query('field_list') String? fieldList,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('resources') String? resources,
   });
 }

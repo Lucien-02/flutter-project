@@ -18,7 +18,8 @@ class _ComicsTabState extends State<ComicsTab> {
   void initState() {
     super.initState();
 
-    BlocProvider.of<ComicBloc>(context).add(LoadComicListEvent(fieldList: 'id,image,name,issue_number,api_detail_url,date_added'));
+    BlocProvider.of<ComicBloc>(context).add(LoadComicListEvent(
+        fieldList: 'id,image,name,issue_number,api_detail_url,date_added'));
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
@@ -30,12 +31,14 @@ class _ComicsTabState extends State<ComicsTab> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent -100 &&
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 100 &&
         !_scrollController.position.outOfRange) {
       final currentState = BlocProvider.of<ComicBloc>(context).state;
       print(currentState);
       if (currentState is ComicLoadedState) {
-        BlocProvider.of<ComicBloc>(context).add(LoadMoreComicsEvent(fieldList: 'id,image,name,issue_number,api_detail_url,date_added'));
+        BlocProvider.of<ComicBloc>(context).add(LoadMoreComicsEvent(
+            fieldList: 'id,image,name,issue_number,api_detail_url,date_added'));
       }
     }
   }
@@ -77,7 +80,7 @@ class _ComicsTabState extends State<ComicsTab> {
                   final formattedDate = formatDate(comic.dateAdded ?? "");
                   final List<Map<IconData, String>> iconTextPairs = [
                     {
-                      Icons.book:  "N° ${comic.issueNumber ?? ' '}",
+                      Icons.book: "N° ${comic.issueNumber ?? ' '}",
                     },
                     {
                       Icons.calendar_today: formattedDate,
@@ -121,11 +124,12 @@ class _ComicsTabState extends State<ComicsTab> {
                   ElevatedButton(
                     onPressed: () {
                       context.read<ComicBloc>().add(
-                        LoadComicListEvent(
-                          fieldList: 'id,image,name,issue_number,api_detail_url',
-                          limit: 50,
-                        ),
-                      );
+                            LoadComicListEvent(
+                              fieldList:
+                                  'id,image,name,issue_number,api_detail_url',
+                              limit: 50,
+                            ),
+                          );
                     },
                     child: Text('Réessayer'),
                   ),
