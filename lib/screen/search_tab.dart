@@ -17,7 +17,7 @@ class _SearchTabState extends State<SearchTab> {
       final apiManager = ApiManager();
 
       // Paramètres pour la recherche
-      String searchQuery = 'batman'; // Le mot-clé de recherche
+      String searchQuery = query; // Le mot-clé de recherche
       String resources =
           'movie,issue,series,character'; // Limiter aux ressources spécifiques
 
