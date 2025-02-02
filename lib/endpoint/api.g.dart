@@ -118,6 +118,7 @@ class _Api implements Api {
     required String apiKey,
     required String format,
     String? fieldList,
+    String? filter,
     int? limit,
     int? offset,
   }) async {
@@ -126,6 +127,7 @@ class _Api implements Api {
       r'api_key': apiKey,
       r'format': format,
       r'field_list': fieldList,
+      r'filter': filter,
       r'limit': limit,
       r'offset': offset,
     };
@@ -198,6 +200,50 @@ class _Api implements Api {
     late PersonListResponse _value;
     try {
       _value = PersonListResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<SearchResponse> loadSearch({
+    required String apiKey,
+    required String format,
+    String? fieldList,
+    String? query,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api_key': apiKey,
+      r'format': format,
+      r'field_list': fieldList,
+      r'query': query,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<SearchResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'search/',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SearchResponse _value;
+    try {
+      _value = SearchResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

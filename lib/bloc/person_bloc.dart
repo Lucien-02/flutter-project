@@ -50,7 +50,6 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
         } else if (error is FormatException) {
           appError = AppError.formatException();
         } else {
-          print(error);
           appError = AppError.generic("Une erreur inconnue est survenue.");
         }
         emit(PersonErrorState(message: appError.message, code: appError.code));

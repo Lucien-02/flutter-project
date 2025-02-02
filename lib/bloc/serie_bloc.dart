@@ -78,7 +78,6 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
         series = seriesList.results;
         emit(SerieLoadedState(series: series));
         offset += seriesList.results.length;
-        print(offset);
 
 
       } catch (error) {
@@ -119,7 +118,6 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
             print('No more data available.');
           }
         } catch (error) {
-          print(error);
           AppError appError;
 
           if (error is DioException) {

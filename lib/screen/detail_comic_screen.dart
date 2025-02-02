@@ -47,7 +47,6 @@ class _DetailComicScreenState extends State<DetailComicScreen> {
   Widget build(BuildContext context) {
     final apiManager = ApiManager(dio:Dio(), baseUrl: widget.url);
     final TextTheme textTheme = Theme.of(context).textTheme;
-    print(widget.id);
     return
       BlocProvider(create: (_) => ComicBloc(apiManager)
         ..add(

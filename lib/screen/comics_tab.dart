@@ -33,7 +33,6 @@ class _ComicsTabState extends State<ComicsTab> {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent -100 &&
         !_scrollController.position.outOfRange) {
       final currentState = BlocProvider.of<ComicBloc>(context).state;
-      print(currentState);
       if (currentState is ComicLoadedState) {
         BlocProvider.of<ComicBloc>(context).add(LoadMoreComicsEvent(fieldList: 'id,image,name,issue_number,api_detail_url,date_added'));
       }

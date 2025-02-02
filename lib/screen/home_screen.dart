@@ -1,5 +1,6 @@
 import 'package:comics_app/bloc/comic_bloc.dart';
 import 'package:comics_app/bloc/film_bloc.dart';
+import 'package:comics_app/bloc/search_bloc.dart';
 import 'package:comics_app/bloc/serie_bloc.dart';
 import 'package:comics_app/bloc/tab_bloc.dart';
 import 'package:comics_app/manager/api_manager.dart';
@@ -44,6 +45,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       child: FilmsTab(),
+    ),
+    BlocProvider(
+      create: (_) => SearchBloc(ApiManager()),
+      child: SearchTab(),
     ),
     SearchTab(),
   ];

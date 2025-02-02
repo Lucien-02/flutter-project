@@ -32,7 +32,6 @@ class _SeriesTabState extends State<SeriesTab> {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent -100 &&
         !_scrollController.position.outOfRange) {
       final currentState = BlocProvider.of<SerieBloc>(context).state;
-      print(currentState);
       if (currentState is SerieLoadedState) {
         BlocProvider.of<SerieBloc>(context).add(LoadMoreSeriesEvent(fieldList: 'id,image,name,publisher,count_of_episodes,start_year,api_detail_url'));
       }

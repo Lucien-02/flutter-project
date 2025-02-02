@@ -41,11 +41,8 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
         } else if (error is FormatException) {
           appError = AppError.formatException();
         } else {
-          print(error);
           appError = AppError.generic("Une erreur inconnue est survenue.");
         }
-        print(appError.message);
-        print(appError.code);
         emit(CharacterErrorState(message: appError.message, code: appError.code));
       }
     });

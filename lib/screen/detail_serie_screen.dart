@@ -39,7 +39,6 @@ class _DetailScreenState extends State<DetailSerieScreen> {
   Widget build(BuildContext context) {
     final apiManager = ApiManager(dio:Dio(), baseUrl: widget.url);
     final TextTheme textTheme = Theme.of(context).textTheme;
-    print(widget.id);
     return
       BlocProvider(create: (_) => SerieBloc(apiManager)
             ..add(
