@@ -37,79 +37,112 @@ class CardWidget extends StatelessWidget {
           switch (type) {
             case 'serie':
               route_name = '/serie-detail';
-              params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+              params = {
+                "title": name,
+                "imageUrl": imageUrl,
+                "url": url,
+                "id": id
+              };
               break;
             case 'comic':
               route_name = '/comic-detail';
-              params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+              params = {
+                "title": name,
+                "imageUrl": imageUrl,
+                "url": url,
+                "id": id
+              };
               break;
             case 'film':
               route_name = '/film-detail';
-              params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+              params = {
+                "title": name,
+                "imageUrl": imageUrl,
+                "url": url,
+                "id": id
+              };
               break;
             default:
               route_name = '/serie-detail';
-              params = { "title":name,"imageUrl":imageUrl,"url":url,"id":id};
+              params = {
+                "title": name,
+                "imageUrl": imageUrl,
+                "url": url,
+                "id": id
+              };
           }
-          GoRouter.of(context).push(route_name,extra: params);
+          GoRouter.of(context).push(route_name, extra: params);
         },
-        child:Card(
+        child: Card(
           color: AppColors.cardBackground,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
           ),
           elevation: 4,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               width: 359,
-              height: 200,
+              height: 164.0,
               child: Row(
                 children: [
                   // Left Image with rank badge
-                  Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          imageUrl.isNotEmpty ? imageUrl : "https://comicvine.gamespot.com/a/uploads/scale_avatar/6/67663/6238345-3060875932-35677.jpg",
-                          width: 129,
-                          height: 133,
-                          fit: BoxFit.cover,
+                  Container(
+                    padding: const EdgeInsets.all(
+                        10), // Optional, for spacing between content
+                    child: Stack(
+                      clipBehavior:
+                          Clip.none, // Ensure content doesn't get clipped
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.network(
+                            imageUrl.isNotEmpty
+                                ? imageUrl
+                                : "https://comicvine.gamespot.com/a/uploads/scale_avatar/6/67663/6238345-3060875932-35677.jpg",
+                            width: 129,
+                            height: 133,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        top: 5,
-                        left: 5,
-                        child:ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Container(
-                            height: 40.49,
-                            width: 59.36,
-                            color: Colors.orange,
-                            alignment: Alignment.center,
-                            child: Text(
-                              '#$rank',
-                              style: textTheme.labelLarge,
-                              textAlign: TextAlign.center,
+                        Positioned(
+                          top: -15,
+                          left: -10,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: Container(
+                              height: 40.49,
+                              width: 59.36,
+                              color: Colors.orange,
+                              alignment: Alignment.center,
+                              child: Text(
+                                '#$rank',
+                                style: textTheme.labelLarge,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   // Text Content
                   Expanded(
                     child: Padding(
-                        padding: EdgeInsets.only(top: 15.0),
+                        padding: const EdgeInsets.only(top: 15.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Title
-                            Text(
-                              name,
-                              style: textTheme.headlineMedium,
+                            SizedBox(
+                              width: 188,
+                              child: Text(
+                                name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.headlineMedium,
+                              ),
                             ),
                             // Subtitle
                             Text(
@@ -120,7 +153,7 @@ class CardWidget extends StatelessWidget {
                                 color: Colors.grey[600],
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             // Key-Value pairs
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,20 +162,21 @@ class CardWidget extends StatelessWidget {
                                 final text = pair.values.first;
                                 return Row(
                                   children: [
-                                    IconTextRow(icon: icon, text: text),
+                                    IconTextRow(
+                                        icon: icon,
+                                        text: text,
+                                        iconColor: Colors.grey[600]),
                                   ],
                                 );
                               }).toList(),
                             ),
                           ],
-                        )
-                    ),
+                        )),
                   ),
                 ],
               ),
             ),
           ),
-        )
-    );
+        ));
   }
 }
