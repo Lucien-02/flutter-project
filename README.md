@@ -1,16 +1,12 @@
 # comics_app
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Fonctionnalités developpées:
+* Ecran d'acceuil présentant quelques séries ,comics, films et personnages
+* Ecran de liste des séries (Système de scroll infini mis en place)
+* Ecran de détail d'une série
+* Ecran de liste des comics (Système de scroll infini mis en place)
+* Ecran de détail d'un comic
+* Ecran de liste des films (Système de scroll infini mis en place)
+* Ecran d'un détail d'un film
+* Ecran d'un détail d'un personnage
+* Ecran de recherche
