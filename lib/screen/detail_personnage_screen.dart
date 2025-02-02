@@ -38,7 +38,6 @@ class _DetailPersonnageScreenState extends State<DetailPersonnageScreen> {
   }
 
   String formatDate(String date) {
-    print(date);
     try {
       //DateTime dateTime = DateTime.parse(date);
       DateTime dateTime = DateFormat('MMM d, y', 'en_US').parse(date);

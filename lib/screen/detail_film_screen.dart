@@ -174,7 +174,6 @@ class _DetailFilmScreenState extends State<DetailFilmScreen> {
                           child: BlocBuilder<FilmBloc, FilmState>(
                             builder: (context, FilmState filmState) {
                               if (filmState is OneFilmLoadedState ) {
-                                print(filmState.film.totalRevenue);
                                 final List<Map<String, String>> cleTextPairs = [
                                   {
                                     "Classification" :  "${filmState.film.rating ?? ''}",

@@ -2,6 +2,7 @@ import 'package:comics_app/endpoint/api.dart';
 import 'package:comics_app/model/comic_response.dart';
 import 'package:comics_app/model/film_response.dart';
 import 'package:comics_app/model/person_response.dart';
+import 'package:comics_app/model/search_response.dart';
 import 'package:comics_app/model/series_list_response.dart';
 import 'package:dio/dio.dart';
 
@@ -70,7 +71,6 @@ class ApiManager {
   }) async {
     final dio = Dio()
       ..options.baseUrl = baseUrl;
-    print(baseUrl);
 
     final response = await dio.get(
       '',
@@ -151,7 +151,6 @@ class ApiManager {
   }) async {
     final dio = Dio()
       ..options.baseUrl = baseUrl;
-    print(baseUrl);
 
     final response = await dio.get(
       '',
@@ -202,6 +201,7 @@ class ApiManager {
 
   Future<FilmListResponse> loadFilmListFromAPI({
     String? fieldList,
+    String? filter,
     int? limit,
     int? offset
   }) async {
@@ -209,6 +209,7 @@ class ApiManager {
       apiKey: apiKey,
       format: format,
       fieldList: fieldList,
+      filter: filter,
       limit: limit,
       offset: offset,);
   }
@@ -231,5 +232,16 @@ class ApiManager {
       },
     );
     return FilmResponseAPI.fromJson(response.data);
+  }
+
+
+  Future<SearchResponse> loadSearchResultFromAPI({
+    String? query,String? fieldList,
+  }) async {
+    return api.loadSearch(
+      apiKey: apiKey,
+      format: format,
+        fieldList: fieldList,
+      query: query);
   }
 }

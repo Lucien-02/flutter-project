@@ -78,7 +78,6 @@ class ComicBloc extends Bloc<ComicEvent, ComicState> {
         comics = comicList.results;
         emit(ComicLoadedState(comics: comics));
         offset += comicList.results.length;
-        print(offset);
 
 
       } catch (error) {

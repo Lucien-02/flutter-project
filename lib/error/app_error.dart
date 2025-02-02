@@ -42,7 +42,6 @@ class AppError {
       case DioExceptionType.cancel:
         return AppError(message: "La demande au serveur API a été annulée.", code: 1004);
       default:
-        print(error);
         return AppError(
           message: "Erreur de réseau inconnue.",
           code: 1000,

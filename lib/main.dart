@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         color: Colors.white,
         fontSize: 12.0,
         fontWeight: FontWeight.w400
-    ),
+    )
   );
 
   final GoRouter _router = GoRouter(routes: [
